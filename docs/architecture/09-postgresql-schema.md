@@ -51,11 +51,62 @@
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | order | NUMBER | Да |  | Порядок |
-| image | TEXT | Да |  | Картинка |
+| image_id | UUID | Нет | FK → images.id | Картинка |
+| poster_id | UUID | Нет | FK → images.id | Постер |
+| preview_id | UUID | Нет | FK → images.id | Превью |
+| icon_id | UUID | Нет | FK → images.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+
+### Связи
+
+```text
+projects 0 ─── N images
+```
+
+### Ограничения
+
+- `slug` должен быть уникальным среди проектов.
+- `is_main` по умолчанию равен `false`.
+- `is_active` по умолчанию равен `true`.
+
+### Индексы
+
+- уникальный индекс по `slug`;
+- индекс по `is_active`, если выборка активных проектов используется часто.
+
+---
+
+## Таблица `services`
+
+### Назначение
+
+Хранит информацию по услугам.
+
+### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор проекта |
+| slug | TEXT | Нет | UNIQUE | Уникальный slug услуги |
+| title | TEXT | Нет |  | Заголовок |
+| short_description | TEXT | Да |  | Короткое описание |
+| description | TEXT | Да |  | Основное описание |
+| order | NUMBER | Да |  | Порядок |
+| image_id | UUID | Нет | FK → images.id | Картинка |
+| poster_id | UUID | Нет | FK → images.id | Постер |
+| preview_id | UUID | Нет | FK → images.id | Превью |
+| icon_id | UUID | Нет | FK → images.id | Иконка |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
+| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
+| updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+
+```text
+services 0 ─── N images
+```
 
 ### Ограничения
 
