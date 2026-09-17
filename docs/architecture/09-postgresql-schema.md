@@ -271,3 +271,46 @@ persons 0 ─── N images
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+
+---
+
+### Таблица `product`
+
+#### Назначение
+
+Хранит информацию по товарам (мерч).
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| slug | TEXT | Нет | UNIQUE | Уникальный slug персоны |
+| title | TEXT | Нет |  | Заголовок |
+| short_description | TEXT | Да |  | Короткое описание |
+| description | TEXT | Да |  | Основное описание |
+| price | NUMBER | Да |  | Цена |
+| order | NUMBER | Да |  | Порядок |
+| image_id | UUID | Нет | FK → images.id | Картинка карточки |
+| poster_id | UUID | Нет | FK → images.id | Постер |
+| preview_id | UUID | Нет | FK → images.id | Превью |
+| icon_id | UUID | Нет | FK → images.id | Иконка |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
+| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
+| updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+
+```text
+products 0 ─── N images
+```
+
+#### Ограничения
+
+- `slug` должен быть уникальным.
+- `is_main` по умолчанию равен `false`.
+- `is_active` по умолчанию равен `true`.
+
+#### Индексы
+
+- уникальный индекс по `slug`;
+- индекс по `is_active`, если выборка активных проектов используется часто.
