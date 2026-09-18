@@ -70,14 +70,14 @@ CHECK (
 
 ## 3. Image strategy
 
-Все изображения хранятся как отдельные записи в таблице `images`.
+Все изображения хранятся как отдельные записи в таблице `image`.
 
-`images` представляет физический медиа-объект и не привязан напрямую к конкретному типу сущности.
+`image` представляет физический медиа-объект и не привязан напрямую к конкретному типу сущности.
 
 Пример:
 
 ```text
-images
+image
 - id
 - storage_key
 - mime_type
@@ -86,9 +86,9 @@ images
 - size
 ```
 
-Другие таблицы ссылаются на `images` через foreign keys.
+Другие таблицы ссылаются на `image` через foreign keys.
 
-Пример для `projects`:
+Пример для `project`:
 
 ```text
 image_id
@@ -97,7 +97,7 @@ preview_id
 icon_id
 ```
 
-Каждое поле имеет собственный смысл и ссылается на `images.id`.
+Каждое поле имеет собственный смысл и ссылается на `image.id`.
 
 ### Галерея
 
@@ -112,7 +112,7 @@ photos
 - ...
 ```
 
-`photos.image_id` ссылается на `images.id`.
+`photos.image_id` ссылается на `image.id`.
 
 В дальнейшем `Photo` может содержать дополнительные атрибуты:
 
@@ -120,7 +120,7 @@ photos
 - `alt`
 - `caption`
 
-### Почему отдельная таблица `images`
+### Почему отдельная таблица `image`
 
 - изображения не дублируются между таблицами;
 - метаданные файла хранятся централизованно;
@@ -133,7 +133,7 @@ photos
 В БД хранится ключ объекта в S3-compatible storage, например:
 
 ```text
-projects/esenin/poster-abc123.webp
+project/esenin/poster-abc123.webp
 ```
 
 Публичный URL формируется приложением или CDN.
@@ -146,7 +146,7 @@ projects/esenin/poster-abc123.webp
 
 ## 4. Список Таблиц
 
-### Таблица `projects`
+### Таблица `project`
 
 #### Назначение
 
@@ -162,10 +162,10 @@ projects/esenin/poster-abc123.webp
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → images.id | Картинка для карточки |
-| poster_id | UUID | Нет | FK → images.id | Постер |
-| preview_id | UUID | Нет | FK → images.id | Превью |
-| icon_id | UUID | Нет | FK → images.id | Иконка |
+| image_id | UUID | Нет | FK → image.id | Картинка для карточки |
+| poster_id | UUID | Нет | FK → image.id | Постер |
+| preview_id | UUID | Нет | FK → image.id | Превью |
+| icon_id | UUID | Нет | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
@@ -174,7 +174,7 @@ projects/esenin/poster-abc123.webp
 #### Связи
 
 ```text
-projects 0 ─── N images
+project 0 ─── N image
 ```
 
 #### Ограничения
@@ -190,7 +190,7 @@ projects 0 ─── N images
 
 ---
 
-### Таблица `services`
+### Таблица `service`
 
 #### Назначение
 
@@ -206,17 +206,17 @@ projects 0 ─── N images
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → images.id | Картинка карточки |
-| poster_id | UUID | Нет | FK → images.id | Постер |
-| preview_id | UUID | Нет | FK → images.id | Превью |
-| icon_id | UUID | Нет | FK → images.id | Иконка |
+| image_id | UUID | Нет | FK → image.id | Картинка карточки |
+| poster_id | UUID | Нет | FK → image.id | Постер |
+| preview_id | UUID | Нет | FK → image.id | Превью |
+| icon_id | UUID | Нет | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
 ```text
-services 0 ─── N images
+service 0 ─── N image
 ```
 
 #### Ограничения
@@ -232,7 +232,7 @@ services 0 ─── N images
 
 ---
 
-### Таблица `persons`
+### Таблица `person`
 
 #### Назначение
 
@@ -248,17 +248,17 @@ services 0 ─── N images
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → images.id | Картинка карточки |
-| poster_id | UUID | Нет | FK → images.id | Постер |
-| preview_id | UUID | Нет | FK → images.id | Превью |
-| icon_id | UUID | Нет | FK → images.id | Иконка |
+| image_id | UUID | Нет | FK → image.id | Картинка карточки |
+| poster_id | UUID | Нет | FK → image.id | Постер |
+| preview_id | UUID | Нет | FK → image.id | Превью |
+| icon_id | UUID | Нет | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
 ```text
-persons 0 ─── N images
+person 0 ─── N image
 ```
 
 #### Ограничения
@@ -291,17 +291,17 @@ persons 0 ─── N images
 | description | TEXT | Да |  | Основное описание |
 | price | NUMBER | Да |  | Цена |
 | order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → images.id | Картинка карточки |
-| poster_id | UUID | Нет | FK → images.id | Постер |
-| preview_id | UUID | Нет | FK → images.id | Превью |
-| icon_id | UUID | Нет | FK → images.id | Иконка |
+| image_id | UUID | Нет | FK → image.id | Картинка карточки |
+| poster_id | UUID | Нет | FK → image.id | Постер |
+| preview_id | UUID | Нет | FK → image.id | Превью |
+| icon_id | UUID | Нет | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
 ```text
-products 0 ─── N images
+product 0 ─── N image
 ```
 
 #### Ограничения
@@ -314,3 +314,248 @@ products 0 ─── N images
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+
+---
+
+### Таблица `category`
+
+#### Назначение
+
+Хранит информацию по категориям.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
+| icon_id | UUID | Нет | FK → image.id | Иконка |
+| text | TEXT | Нет |  | Заголовок |
+| is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
+
+```text
+category 0 ─── N image
+category 1 ─── 1 project
+```
+
+#### Ограничения
+
+- `slug` должен быть уникальным.
+- `is_attention` по умолчанию равен `false`.
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `project_category`
+
+#### Назначение
+
+Хранит информацию по связи проектов с категориями.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| category_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+
+```text
+project_category 1 ─── 1 project
+project_category 1 ─── 1 category
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `service_category`
+
+#### Назначение
+
+Хранит информацию по связи услуг с категориями.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| service_id | UUID | Нет | FK → service.id | Ссылка на проект |
+| category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
+
+```text
+service_category 1 ─── 1 service
+service_category 1 ─── 1 category
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `person_category`
+
+#### Назначение
+
+Хранит информацию по связи персон с категориями.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
+
+```text
+person_category 1 ─── 1 person
+person_category 1 ─── 1 category
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `product_category`
+
+#### Назначение
+
+Хранит информацию по связи товаров с категориями.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
+| category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
+
+```text
+product_category 1 ─── 1 product
+product_category 1 ─── 1 category
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `photo`
+
+#### Назначение
+
+Хранит информацию по фотографиям.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
+| image_id | UUID | Нет | FK → image.id | Ссылка на изображение |
+
+```text
+photo 1 ─── 1 projects
+photo 1 ─── 1 service
+photo 1 ─── 1 person
+photo 1 ─── 1 product
+photo 1 ─── 1 image
+```
+
+#### Ограничения
+
+На уровне PostgreSQL используется `CHECK`, гарантирующий, что заполнен ровно один внешний ключ владельца.
+
+```sql
+CHECK (
+  num_nonnulls(
+    project_id,
+    service_id,
+    person_id,
+    product_id
+  ) = 1
+)
+```
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `action`
+
+#### Назначение
+
+Хранит информацию по действиям.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор персоны |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
+| icon_id | UUID | Нет | FK → image.id | Ссылка на изображение |
+| url | TEXT | Нет | Нет | Ссылка |
+| text | TEXT | Нет | Нет | Лейбл |
+
+```text
+action 1 ─── 1 projects
+action 1 ─── 1 service
+action 1 ─── 1 person
+action 1 ─── 1 product
+action 1 ─── 1 image
+```
+
+#### Ограничения
+
+На уровне PostgreSQL используется `CHECK`, гарантирующий, что заполнен ровно один внешний ключ владельца.
+
+```sql
+CHECK (
+  num_nonnulls(
+    project_id,
+    service_id,
+    person_id,
+    product_id
+  ) = 1
+)
+```
+
+#### Индексы
+
+Нет
