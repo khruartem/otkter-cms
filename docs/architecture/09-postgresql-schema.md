@@ -741,12 +741,120 @@ service_media_mention 1 ─── 1 media_mention
 | is_active | BOOLEAN | Да | Нет | Флаг, что мероприятие предстоящее |
 
 ```text
-event 1 ─── 1 project_id
+event 1 ─── 1 project
 ```
 
 #### Ограничения
 
 - `is_active` по умолчанию равен `true`.
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `cta`
+
+#### Назначение
+
+Хранит информацию по CTA.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
+| icon_id | UUID | Нет | FK → image.id | Ссылка на иконку |
+| text | TEXT | Да | Нет | Подпись |
+
+```text
+cta 1 ─── 1 project
+cta 1 ─── 1 service
+cta 1 ─── 1 person
+cta 1 ─── 1 product
+```
+
+#### Ограничения
+
+На уровне PostgreSQL используется `CHECK`, гарантирующий, что заполнен ровно один внешний ключ владельца.
+
+```sql
+CHECK (
+  num_nonnulls(
+    project_id,
+    service_id,
+    person_id,
+    product_id
+  ) = 1
+)
+```
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `project_person`
+
+#### Назначение
+
+Хранит информацию по связи проектов с персонами.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| role | TEXT | Да | Нет | Роль |
+| extra | TEXT | Да | Нет | Пояснение |
+
+```text
+project_person 1 ─── 1 project
+project_person 1 ─── 1 person
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `service_person`
+
+#### Назначение
+
+Хранит информацию по связи услуг с персонами.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| role | TEXT | Да | Нет | Роль |
+| extra | TEXT | Да | Нет | Пояснение |
+
+```text
+service_person 1 ─── 1 service
+service_person 1 ─── 1 person
+```
+
+#### Ограничения
+
+Нет
 
 #### Индексы
 
