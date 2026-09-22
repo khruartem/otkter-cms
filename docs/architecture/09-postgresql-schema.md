@@ -532,6 +532,7 @@ CHECK (
 | icon_id | UUID | Нет | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка |
 | text | TEXT | Нет | Нет | Лейбл |
+| type | TEXT | Нет | Доступны только значения: `primary`, `secondary` | Тип действия |
 
 ```text
 action 1 ─── 1 projects
@@ -566,19 +567,21 @@ CHECK (
 
 #### Назначение
 
-Хранит информацию по упоминаниям в СМИ.
+Хранит информацию по социальным сетям.
 
 #### Поля
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
+| id | UUID | Нет | PK | Идентификатор |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | icon_id | UUID | Нет | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка на ресурс |
 | title | TEXT | Нет | Нет | Заголовок |
 
 ```text
 social_media 1 ─── 1 image
+social_media 1 ─── 1 person
 ```
 
 #### Ограничения
@@ -591,52 +594,65 @@ social_media 1 ─── 1 image
 
 ---
 
-### Таблица `project_social_media`
+### Таблица `characteristic`
 
 #### Назначение
 
-Хранит информацию по связи проектов с упоминаниям в СМИ.
+Хранит информацию по характеристикам.
 
 #### Поля
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
+| id | UUID | Нет | PK | Идентификатор |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| social_media_id | UUID | Нет | FK → social_media.id | Ссылка на упоминание в СМИ |
-
-```text
-project_social_media 1 ─── 1 project
-project_social_media 1 ─── 1 social_media
-```
-
-#### Ограничения
-
-Нет
-
-#### Индексы
-
-Нет
-
----
-
-### Таблица `service_social_media`
-
-#### Назначение
-
-Хранит информацию по связи услуг с упоминаниям в СМИ.
-
-#### Поля
-
-| Поле | Тип | NULL | Ограничения | Описание |
-|---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
 | service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| social_media_id | UUID | Нет | FK → social_media.id | Ссылка на упоминание в СМИ |
+| icon_id | UUID | Нет | FK → image.id | Ссылка на иконку |
+| title | TEXT | Нет | Нет | Заголовок |
+| value | TEXT[] | Нет | Нет | Значения |
 
 ```text
-service_social_media 1 ─── 1 service
-service_social_media 1 ─── 1 social_media
+characteristic 1 ─── 1 project
+characteristic 1 ─── 1 service
+characteristic 1 ─── 1 image
+```
+
+#### Ограничения
+
+На уровне PostgreSQL используется `CHECK`, гарантирующий, что заполнен ровно один внешний ключ владельца.
+
+```sql
+CHECK (
+  num_nonnulls(
+    project_id,
+    service_id
+  ) = 1
+)
+```
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `media_mention`
+
+#### Назначение
+
+Хранит информацию по упоминаниям в СМИ.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| image_id | UUID | Нет | FK → image.id | Ссылка на изображение СМИ |
+| title | TEXT | Нет | Нет | Название СМИ |
+| text | TEXT | Нет | Нет | Заголовок статьи |
+
+```text
+media_mention 1 ─── 1 image
 ```
 
 #### Ограничения
@@ -649,28 +665,88 @@ service_social_media 1 ─── 1 social_media
 
 ---
 
-### Таблица `person_social_media`
+### Таблица `project_media_mention`
 
 #### Назначение
 
-Хранит информацию по связи персон с упоминаниям в СМИ.
+Хранит информацию по связям упоминаний в СМИ и проектов.
 
 #### Поля
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
-| person_id | UUID | Нет | FK → service.id | Ссылка на персону |
-| social_media_id | UUID | Нет | FK → social_media.id | Ссылка на упоминание в СМИ |
+| id | UUID | Нет | PK | Идентификатор |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| media_mention_id | UUID | Нет | FK → media_mention.id | Ссылка на упоминание в СМИ |
 
 ```text
-person_social_media 1 ─── 1 person
-person_social_media 1 ─── 1 social_media
+project_media_mention 1 ─── 1 project
+project_media_mention 1 ─── 1 media_mention
 ```
 
 #### Ограничения
 
 Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `service_media_mention`
+
+#### Назначение
+
+Хранит информацию по связям упоминаний в СМИ и услуг.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| media_mention_id | UUID | Нет | FK → media_mention.id | Ссылка на упоминание в СМИ |
+
+```text
+service_media_mention 1 ─── 1 service
+service_media_mention 1 ─── 1 media_mention
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `event`
+
+#### Назначение
+
+Хранит информацию по событиям.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| place | TEXT | Нет | Нет | Место проведения |
+| date_time | TIMESTAMPTZ | Нет | Нет | Дата и время |
+| label | TEXT | Да | Нет | Подпись |
+| is_active | BOOLEAN | Да | Нет | Флаг, что мероприятие предстоящее |
+
+```text
+event 1 ─── 1 project_id
+```
+
+#### Ограничения
+
+- `is_active` по умолчанию равен `true`.
 
 #### Индексы
 
