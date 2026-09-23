@@ -389,7 +389,7 @@ ProductCharacteristicList 1 ─── 1..N ProductCharacteristic
 
 - id
 - color
-- title
+- text
 
 ### Связи
 

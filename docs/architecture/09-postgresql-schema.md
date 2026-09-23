@@ -859,3 +859,61 @@ service_person 1 ─── 1 person
 #### Индексы
 
 Нет
+
+---
+
+### Таблица `product_characteristic_list`
+
+#### Назначение
+
+Хранит информацию по списку характеристик по товару.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
+| title | TEXT | Да | Нет | Заголовок |
+| extra | TEXT | Да | Нет | Пояснение |
+
+```text
+product_characteristic_list 1 ─── 1 product
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `product_characteristic`
+
+#### Назначение
+
+Хранит информацию по характеристики по товару.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| characteristic_list_id | UUID | Нет | FK → product_characteristic_list.id | Ссылка на список характеристик |
+| color | TEXT | Да | Нет | Цвет |
+| text | TEXT | Да | Нет | Пояснение |
+
+```text
+product_characteristic 1 ─── 1 product_characteristic_list
+```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
