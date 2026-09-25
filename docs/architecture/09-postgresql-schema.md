@@ -328,23 +328,17 @@ product 0 ─── N image
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор персоны |
-| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
-| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
 | icon_id | UUID | Нет | FK → image.id | Иконка |
 | text | TEXT | Нет |  | Заголовок |
 | is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
 
 ```text
 category 0 ─── N image
-category 1 ─── 1 project
 ```
 
 #### Ограничения
 
-- `slug` должен быть уникальным.
-- `is_attention` по умолчанию равен `false`.
+Нет
 
 #### Индексы
 
