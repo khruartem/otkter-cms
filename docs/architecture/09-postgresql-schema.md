@@ -116,7 +116,7 @@ photos
 
 В дальнейшем `Photo` может содержать дополнительные атрибуты:
 
-- `order`
+- `sort_order`
 - `alt`
 - `caption`
 
@@ -161,11 +161,11 @@ project/esenin/poster-abc123.webp
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
-| order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → image.id | Картинка для карточки |
-| poster_id | UUID | Нет | FK → image.id | Постер |
-| preview_id | UUID | Нет | FK → image.id | Превью |
-| icon_id | UUID | Нет | FK → image.id | Иконка |
+| sort_order | INTEGER | Да |  | Порядок |
+| image_id | UUID | Да | FK → image.id | Картинка для карточки |
+| poster_id | UUID | Да | FK → image.id | Постер |
+| preview_id | UUID | Да | FK → image.id | Превью |
+| icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
@@ -174,7 +174,10 @@ project/esenin/poster-abc123.webp
 #### Связи
 
 ```text
-project 0 ─── N image
+project.image   0..1 → 1 image
+project.poster  0..1 → 1 image
+project.preview 0..1 → 1 image
+project.icon    0..1 → 1 image
 ```
 
 #### Ограничения
@@ -205,18 +208,21 @@ project 0 ─── N image
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
-| order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → image.id | Картинка карточки |
-| poster_id | UUID | Нет | FK → image.id | Постер |
-| preview_id | UUID | Нет | FK → image.id | Превью |
-| icon_id | UUID | Нет | FK → image.id | Иконка |
+| sort_order | INTEGER | Да |  | Порядок |
+| image_id | UUID | Да | FK → image.id | Картинка карточки |
+| poster_id | UUID | Да | FK → image.id | Постер |
+| preview_id | UUID | Да | FK → image.id | Превью |
+| icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
 ```text
-service 0 ─── N image
+service.image   0..1 → 1 image
+service.poster  0..1 → 1 image
+service.preview 0..1 → 1 image
+service.icon    0..1 → 1 image
 ```
 
 #### Ограничения
@@ -247,18 +253,21 @@ service 0 ─── N image
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
-| order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → image.id | Картинка карточки |
-| poster_id | UUID | Нет | FK → image.id | Постер |
-| preview_id | UUID | Нет | FK → image.id | Превью |
-| icon_id | UUID | Нет | FK → image.id | Иконка |
+| sort_order | INTEGER | Да |  | Порядок |
+| image_id | UUID | Да | FK → image.id | Картинка карточки |
+| poster_id | UUID | Да | FK → image.id | Постер |
+| preview_id | UUID | Да | FK → image.id | Превью |
+| icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
 ```text
-person 0 ─── N image
+person.image   0..1 → 1 image
+person.poster  0..1 → 1 image
+person.preview 0..1 → 1 image
+person.icon    0..1 → 1 image
 ```
 
 #### Ограничения
@@ -284,24 +293,27 @@ person 0 ─── N image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
-| slug | TEXT | Нет | UNIQUE | Уникальный slug персоны |
+| id | UUID | Нет | PK | Идентификатор товара |
+| slug | TEXT | Нет | UNIQUE | Уникальный slug товара |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
-| price | NUMBER | Да |  | Цена |
-| order | NUMBER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → image.id | Картинка карточки |
-| poster_id | UUID | Нет | FK → image.id | Постер |
-| preview_id | UUID | Нет | FK → image.id | Превью |
-| icon_id | UUID | Нет | FK → image.id | Иконка |
+| price | NUMERIC(10,2) | Да |  | Цена |
+| sort_order | INTEGER | Да |  | Порядок |
+| image_id | UUID | Да | FK → image.id | Картинка карточки |
+| poster_id | UUID | Да | FK → image.id | Постер |
+| preview_id | UUID | Да | FK → image.id | Превью |
+| icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
 ```text
-product 0 ─── N image
+product.image   0..1 → 1 image
+product.poster  0..1 → 1 image
+product.preview 0..1 → 1 image
+product.icon    0..1 → 1 image
 ```
 
 #### Ограничения
@@ -309,6 +321,7 @@ product 0 ─── N image
 - `slug` должен быть уникальным.
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
+- CHECK (price >= 0).
 
 #### Индексы
 
@@ -327,8 +340,8 @@ product 0 ─── N image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
-| icon_id | UUID | Нет | FK → image.id | Иконка |
+| id | UUID | Нет | PK | Идентификатор |
+| icon_id | UUID | Да | FK → image.id | Иконка |
 | text | TEXT | Нет |  | Заголовок |
 | is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
 
@@ -356,9 +369,8 @@ category 0 ─── N image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| category_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
 
 ```text
 project_category 1 ─── 1 project
@@ -367,7 +379,7 @@ project_category 1 ─── 1 category
 
 #### Ограничения
 
-Нет
+PRIMARY KEY (project_id, category_id)
 
 #### Индексы
 
@@ -385,8 +397,7 @@ project_category 1 ─── 1 category
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
-| service_id | UUID | Нет | FK → service.id | Ссылка на проект |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
 | category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
 
 ```text
@@ -396,7 +407,7 @@ service_category 1 ─── 1 category
 
 #### Ограничения
 
-Нет
+PRIMARY KEY (service_id, category_id)
 
 #### Индексы
 
@@ -414,7 +425,6 @@ service_category 1 ─── 1 category
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
 
@@ -425,7 +435,7 @@ person_category 1 ─── 1 category
 
 #### Ограничения
 
-Нет
+PRIMARY KEY (person_id, category_id)
 
 #### Индексы
 
@@ -443,7 +453,6 @@ person_category 1 ─── 1 category
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
 | product_id | UUID | Нет | FK → product.id | Ссылка на товар |
 | category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
 
@@ -454,7 +463,7 @@ product_category 1 ─── 1 category
 
 #### Ограничения
 
-Нет
+PRIMARY KEY (product_id, category_id)
 
 #### Индексы
 
@@ -472,12 +481,12 @@ product_category 1 ─── 1 category
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
-| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
-| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
-| image_id | UUID | Нет | FK → image.id | Ссылка на изображение |
+| id | UUID | Нет | PK | Идентификатор |
+| project_id | UUID | Да | FK → project.id | Ссылка на проект |
+| service_id | UUID | Да | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Да | FK → person.id | Ссылка на персону |
+| product_id | UUID | Да | FK → product.id | Ссылка на товар |
+| image_id | UUID | Да | FK → image.id | Ссылка на изображение |
 
 ```text
 photo 1 ─── 1 projects
@@ -518,12 +527,12 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
-| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
-| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
-| icon_id | UUID | Нет | FK → image.id | Ссылка на изображение |
+| id | UUID | Нет | PK | Идентификатор |
+| project_id | UUID | Да | FK → project.id | Ссылка на проект |
+| service_id | UUID | Да | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Да | FK → person.id | Ссылка на персону |
+| product_id | UUID | Да | FK → product.id | Ссылка на товар |
+| icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка |
 | text | TEXT | Нет | Нет | Лейбл |
 | type | TEXT | Нет | Доступны только значения: `primary`, `secondary` | Тип действия |
@@ -551,6 +560,8 @@ CHECK (
 )
 ```
 
+CHECK (type IN ('primary', 'secondary'))
+
 #### Индексы
 
 Нет
@@ -569,7 +580,7 @@ CHECK (
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
-| icon_id | UUID | Нет | FK → image.id | Ссылка на изображение |
+| icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка на ресурс |
 | title | TEXT | Нет | Нет | Заголовок |
 
@@ -599,9 +610,9 @@ social_media 1 ─── 1 person
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
-| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| icon_id | UUID | Нет | FK → image.id | Ссылка на иконку |
+| project_id | UUID | Да | FK → project.id | Ссылка на проект |
+| service_id | UUID | Да | FK → service.id | Ссылка на услугу |
+| icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
 | title | TEXT | Нет | Нет | Заголовок |
 | value | TEXT[] | Нет | Нет | Значения |
 
@@ -641,7 +652,7 @@ CHECK (
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
-| image_id | UUID | Нет | FK → image.id | Ссылка на изображение СМИ |
+| image_id | UUID | Да | FK → image.id | Ссылка на изображение СМИ |
 | title | TEXT | Нет | Нет | Название СМИ |
 | text | TEXT | Нет | Нет | Заголовок статьи |
 
@@ -669,7 +680,6 @@ media_mention 1 ─── 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
 | media_mention_id | UUID | Нет | FK → media_mention.id | Ссылка на упоминание в СМИ |
 
@@ -680,7 +690,7 @@ project_media_mention 1 ─── 1 media_mention
 
 #### Ограничения
 
-Нет
+PRIMARY KEY (project_id, media_mention_id)
 
 #### Индексы
 
@@ -688,18 +698,17 @@ project_media_mention 1 ─── 1 media_mention
 
 ---
 
-### Таблица `service_media_mention`
+### Таблица `person_media_mention`
 
 #### Назначение
 
-Хранит информацию по связям упоминаний в СМИ и услуг.
+Хранит информацию по связям упоминаний в СМИ и персон.
 
 #### Поля
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Нет | FK → service.id | Ссылка на персону |
 | media_mention_id | UUID | Нет | FK → media_mention.id | Ссылка на упоминание в СМИ |
 
 ```text
@@ -709,7 +718,7 @@ service_media_mention 1 ─── 1 media_mention
 
 #### Ограничения
 
-Нет
+PRIMARY KEY(person_id, media_mention_id)
 
 #### Индексы
 
@@ -759,11 +768,11 @@ event 1 ─── 1 project
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
-| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
-| product_id | UUID | Нет | FK → product.id | Ссылка на товар |
-| icon_id | UUID | Нет | FK → image.id | Ссылка на иконку |
+| project_id | UUID | Да | FK → project.id | Ссылка на проект |
+| service_id | UUID | Да | FK → service.id | Ссылка на услугу |
+| person_id | UUID | Да | FK → person.id | Ссылка на персону |
+| product_id | UUID | Да | FK → product.id | Ссылка на товар |
+| icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
 | text | TEXT | Да | Нет | Подпись |
 
 ```text
@@ -805,8 +814,8 @@ CHECK (
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
-| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
-| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
+| project_id | UUID | Да | FK → project.id | Ссылка на проект |
+| person_id | UUID | Да | FK → person.id | Ссылка на персону |
 | role | TEXT | Да | Нет | Роль |
 | extra | TEXT | Да | Нет | Пояснение |
 
@@ -903,6 +912,34 @@ product_characteristic_list 1 ─── 1 product
 ```text
 product_characteristic 1 ─── 1 product_characteristic_list
 ```
+
+#### Ограничения
+
+Нет
+
+#### Индексы
+
+Нет
+
+---
+
+### Таблица `image`
+
+#### Назначение
+
+Хранит информацию по характеристикам по товару.
+
+#### Поля
+
+| Поле | Тип | NULL | Ограничения | Описание |
+|---|---|---:|---|---|
+| id | UUID | Нет | PK | Идентификатор |
+| storage_key | TEXT | Нет | UNIQUE | Ключ хранилища |
+| mime_type | TEXT | Да | Нет | MIME-тип |
+| width | INTEGER | Да | Да | Ширина |
+| height | INTEGER | Да | Да | Высота |
+| size | BIGINT | Да | Да | Размер |
+| created_at | TIMESTAMPTZ | Да | `DEFAULT now()` | Дата создания |
 
 #### Ограничения
 
