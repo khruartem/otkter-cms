@@ -144,7 +144,74 @@ project/esenin/poster-abc123.webp
 
 Добавляется отдельная таблица и дополнительные foreign keys, но это принято ради централизованного управления медиа и независимости от конкретного storage URL.
 
-## 4. Список Таблиц
+## 4. Publication strategy
+
+Для сущностей, публикуемых на публичном сайте, состояние публикации хранится отдельно от признака бизнес-активности.
+
+Поддерживаются два состояния:
+
+- `draft` — черновик, может содержать неполные данные;
+- `published` — опубликованная сущность, доступная публичному сайту.
+
+Физически состояние публикации хранится в поле:
+
+```text
+publication_status
+```
+
+Для поля используется `TEXT` с ограничением:
+
+```sql
+CHECK (
+  publication_status IN ('draft', 'published')
+)
+```
+
+Значение по умолчанию:
+
+```sql
+DEFAULT 'draft'
+```
+
+### Отличие от `is_active`
+
+`publication_status` отвечает за факт публикации сущности.
+
+`is_active` отвечает за ее бизнес-активность и не заменяет состояние публикации.
+
+Например:
+
+```text
+publication_status = published
+is_active = false
+```
+
+означает, что сущность опубликована, но помечена как неактивная.
+
+### Проверка при публикации
+
+Черновик может содержать неполные данные.
+
+Обязательные для публикации поля проверяются на уровне application layer при переходе из `draft` в `published`.
+
+Ограничения `NOT NULL` используются только для данных, без которых сама запись не имеет смысла независимо от состояния публикации.
+
+### Применение
+
+`publication_status` добавляется в таблицы:
+
+- `project`
+- `service`
+- `person`
+- `product`
+
+Пример поля:
+
+```text
+| publication_status | TEXT | Нет | DEFAULT 'draft', CHECK (...) | Состояние публикации |
+```
+
+## 5. Список Таблиц
 
 ### Таблица `project`
 
@@ -170,6 +237,7 @@ project/esenin/poster-abc123.webp
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
 
 #### Связи
 
@@ -217,6 +285,7 @@ project.icon    0..1 → 1 image
 | is_active | BOOLEAN | Нет | DEFAULT true | Активная услуга |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
 service.image   0..1 → 1 image
@@ -262,6 +331,7 @@ service.icon    0..1 → 1 image
 | is_active | BOOLEAN | Нет | DEFAULT true | Активная персона |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
 person.image   0..1 → 1 image
@@ -308,6 +378,7 @@ person.icon    0..1 → 1 image
 | is_active | BOOLEAN | Нет | DEFAULT true | Активный товар |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
+| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
 product.image   0..1 → 1 image
