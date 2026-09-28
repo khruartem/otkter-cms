@@ -493,6 +493,7 @@ photo.project_id  0..1 → 1 project
 photo.service_id  0..1 → 1 service
 photo.person_id   0..1 → 1 person
 photo.product_id  0..1 → 1 product
+photo.image 1 → 1 image
 ```
 
 #### Ограничения
@@ -541,7 +542,7 @@ action.project_id  0..1 → 1 project
 action.service_id  0..1 → 1 service
 action.person_id   0..1 → 1 person
 action.product_id  0..1 → 1 product
-action 1 ─── 1 image
+action.icon 0..1 → 1 image
 ```
 
 #### Ограничения
@@ -656,7 +657,7 @@ CHECK (
 | text | TEXT | Нет | Нет | Заголовок статьи |
 
 ```text
-category.image 0..1 → 1 image
+media_mention.image 0..1 → 1 image
 ```
 
 #### Ограничения
@@ -740,7 +741,7 @@ PRIMARY KEY(person_id, media_mention_id)
 | place | TEXT | Нет | Нет | Место проведения |
 | date_time | TIMESTAMPTZ | Нет | Нет | Дата и время |
 | label | TEXT | Да | Нет | Подпись |
-| is_active | BOOLEAN | Да | Нет | Признак актуальности события, устанавливается администратором |
+| is_active | BOOLEAN | Нет | DEFAULT true | Признак актуальности события, устанавливается администратором |
 
 ```text
 event 1 ─── 1 project
@@ -748,7 +749,7 @@ event 1 ─── 1 project
 
 #### Ограничения
 
-- `is_active` по умолчанию равен `true`.
+Нет
 
 #### Индексы
 
@@ -778,7 +779,7 @@ event 1 ─── 1 project
 cta.project_id  0..1 → 1 project
 cta.service_id  0..1 → 1 service
 cta.person_id   0..1 → 1 person
-cta 1 ─── 1 product
+cta.product_id 1 ─── 1 product
 ```
 
 #### Ограничения
