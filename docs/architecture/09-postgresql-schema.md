@@ -779,7 +779,7 @@ event 1 ─── 1 project
 cta.project_id  0..1 → 1 project
 cta.service_id  0..1 → 1 service
 cta.person_id   0..1 → 1 person
-cta.product_id 1 ─── 1 product
+cta.product_id 0..1 → 1 product
 ```
 
 #### Ограничения
