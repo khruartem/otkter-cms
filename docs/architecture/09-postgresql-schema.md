@@ -14,7 +14,7 @@
 
 Для сущностей, которые могут принадлежать одному из нескольких типов владельцев, используются отдельные nullable foreign keys.
 
-Пример для `categories`:
+Пример для `photo`:
 
 - `project_id`
 - `service_id`
@@ -214,7 +214,7 @@ project.icon    0..1 → 1 image
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| is_active | BOOLEAN | Нет | DEFAULT true | Активная услуга |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
@@ -242,7 +242,7 @@ service.icon    0..1 → 1 image
 
 #### Назначение
 
-Хранит информацию по услугам.
+Хранит информацию по персонам.
 
 #### Поля
 
@@ -259,7 +259,7 @@ service.icon    0..1 → 1 image
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| is_active | BOOLEAN | Нет | DEFAULT true | Активная персона |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
@@ -305,7 +305,7 @@ person.icon    0..1 → 1 image
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| is_active | BOOLEAN | Нет | DEFAULT true | Активный товар |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 
@@ -346,7 +346,7 @@ product.icon    0..1 → 1 image
 | is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
 
 ```text
-category 0 ─── N image
+category.icon 0..1 → 1 image
 ```
 
 #### Ограничения
@@ -486,14 +486,13 @@ PRIMARY KEY (product_id, category_id)
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
 | product_id | UUID | Да | FK → product.id | Ссылка на товар |
-| image_id | UUID | Да | FK → image.id | Ссылка на изображение |
+| image_id | UUID | Нет | FK → image.id | Ссылка на изображение |
 
 ```text
-photo 1 ─── 1 projects
-photo 1 ─── 1 service
-photo 1 ─── 1 person
-photo 1 ─── 1 product
-photo 1 ─── 1 image
+photo.project_id  0..1 → 1 project
+photo.service_id  0..1 → 1 service
+photo.person_id   0..1 → 1 person
+photo.product_id  0..1 → 1 product
 ```
 
 #### Ограничения
@@ -538,10 +537,10 @@ CHECK (
 | type | TEXT | Нет | Доступны только значения: `primary`, `secondary` | Тип действия |
 
 ```text
-action 1 ─── 1 projects
-action 1 ─── 1 service
-action 1 ─── 1 person
-action 1 ─── 1 product
+action.project_id  0..1 → 1 project
+action.service_id  0..1 → 1 service
+action.person_id   0..1 → 1 person
+action.product_id  0..1 → 1 product
 action 1 ─── 1 image
 ```
 
@@ -585,8 +584,8 @@ CHECK (type IN ('primary', 'secondary'))
 | title | TEXT | Нет | Нет | Заголовок |
 
 ```text
-social_media 1 ─── 1 image
 social_media 1 ─── 1 person
+social_media.icon 0..1 → 1 image
 ```
 
 #### Ограничения
@@ -617,9 +616,9 @@ social_media 1 ─── 1 person
 | value | TEXT[] | Нет | Нет | Значения |
 
 ```text
-characteristic 1 ─── 1 project
-characteristic 1 ─── 1 service
-characteristic 1 ─── 1 image
+characteristic.project_id  0..1 → 1 project
+characteristic.service_id  0..1 → 1 service
+characteristic.icon 0..1 → 1 image
 ```
 
 #### Ограничения
@@ -657,7 +656,7 @@ CHECK (
 | text | TEXT | Нет | Нет | Заголовок статьи |
 
 ```text
-media_mention 1 ─── 1 image
+category.image 0..1 → 1 image
 ```
 
 #### Ограничения
@@ -708,12 +707,12 @@ PRIMARY KEY (project_id, media_mention_id)
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| person_id | UUID | Нет | FK → service.id | Ссылка на персону |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | media_mention_id | UUID | Нет | FK → media_mention.id | Ссылка на упоминание в СМИ |
 
 ```text
-service_media_mention 1 ─── 1 service
-service_media_mention 1 ─── 1 media_mention
+person_media_mention 1 ─── 1 person
+person_media_mention 1 ─── 1 media_mention
 ```
 
 #### Ограничения
@@ -741,7 +740,7 @@ PRIMARY KEY(person_id, media_mention_id)
 | place | TEXT | Нет | Нет | Место проведения |
 | date_time | TIMESTAMPTZ | Нет | Нет | Дата и время |
 | label | TEXT | Да | Нет | Подпись |
-| is_active | BOOLEAN | Да | Нет | Флаг, что мероприятие предстоящее |
+| is_active | BOOLEAN | Да | Нет | Признак актуальности события, устанавливается администратором |
 
 ```text
 event 1 ─── 1 project
@@ -776,9 +775,9 @@ event 1 ─── 1 project
 | text | TEXT | Да | Нет | Подпись |
 
 ```text
-cta 1 ─── 1 project
-cta 1 ─── 1 service
-cta 1 ─── 1 person
+cta.project_id  0..1 → 1 project
+cta.service_id  0..1 → 1 service
+cta.person_id   0..1 → 1 person
 cta 1 ─── 1 product
 ```
 
@@ -814,8 +813,8 @@ CHECK (
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
-| project_id | UUID | Да | FK → project.id | Ссылка на проект |
-| person_id | UUID | Да | FK → person.id | Ссылка на персону |
+| project_id | UUID | Нет | FK → project.id | Ссылка на проект |
+| person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | role | TEXT | Да | Нет | Роль |
 | extra | TEXT | Да | Нет | Пояснение |
 
@@ -927,7 +926,7 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 #### Назначение
 
-Хранит информацию по характеристикам по товару.
+Хранит метаданные изображений, размещённых в объектном хранилище.
 
 #### Поля
 
@@ -936,10 +935,10 @@ product_characteristic 1 ─── 1 product_characteristic_list
 | id | UUID | Нет | PK | Идентификатор |
 | storage_key | TEXT | Нет | UNIQUE | Ключ хранилища |
 | mime_type | TEXT | Да | Нет | MIME-тип |
-| width | INTEGER | Да | Да | Ширина |
-| height | INTEGER | Да | Да | Высота |
-| size | BIGINT | Да | Да | Размер |
-| created_at | TIMESTAMPTZ | Да | `DEFAULT now()` | Дата создания |
+| width | INTEGER | Да | Нет | Ширина |
+| height | INTEGER | Да | Нет | Высота |
+| size | BIGINT | Да | Нет | Размер |
+| created_at | TIMESTAMPTZ | Нет | `DEFAULT now()` | Дата создания |
 
 #### Ограничения
 
