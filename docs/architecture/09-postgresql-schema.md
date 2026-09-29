@@ -253,6 +253,7 @@ project.icon    0..1 → 1 image
 - `slug` должен быть уникальным.
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
+- `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
@@ -299,6 +300,7 @@ service.icon    0..1 → 1 image
 - `slug` должен быть уникальным.
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
+- `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
@@ -345,6 +347,7 @@ person.icon    0..1 → 1 image
 - `slug` должен быть уникальным.
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
+- `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
@@ -393,6 +396,7 @@ product.icon    0..1 → 1 image
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
 - CHECK (price >= 0).
+- `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
