@@ -211,7 +211,45 @@ is_active = false
 | publication_status | TEXT | Нет | DEFAULT 'draft', CHECK (...) | Состояние публикации |
 ```
 
-## 5. Список Таблиц
+## 5. Delete policy
+
+Политика удаления определяется семантикой связи.
+
+Используются следующие стратегии:
+
+- `CASCADE` — для зависимых сущностей, которые не имеют смысла без владельца;
+- `RESTRICT` — если удаление родительской записи недопустимо, пока существуют зависимости;
+- `SET NULL` — если зависимая сущность может продолжать существовать без ссылки.
+
+Правило выбирается отдельно для каждого foreign key.
+
+| Связь | `ON DELETE` | Почему |
+|---|---|---|
+| `project/service/person/product.image_id → image.id` | `RESTRICT` | Основная сущность не может быть без изображения карточки |
+| `project/service/person/product.*_id → image.id` | `SET NULL` | Основная сущность может существовать без изображения |
+| `category.icon_id → image.id` | `SET NULL` | Категория может существовать без иконки |
+| `photo.image_id → image.id` | `RESTRICT` | `Photo` без физического изображения не имеет смысла |
+| `photo.*_owner_id → root.id` | `CASCADE` | Фото является частью конкретного владельца |
+| `action.icon_id → image.id` | `SET NULL` | Действие может существовать без иконки |
+| `action.*_owner_id → root.id` | `CASCADE` | Action принадлежит владельцу |
+| `social_media.icon_id → image.id` | `SET NULL` | Ссылка на соцсеть может существовать без иконки |
+| `social_media.person_id → person.id` | `CASCADE` | SocialMedia не существует независимо от Person |
+| `characteristic.icon_id → image.id` | `SET NULL` | Характеристика может существовать без иконки |
+| `characteristic.*_owner_id → root.id` | `CASCADE` | Характеристика принадлежит одному владельцу |
+| `media_mention.image_id → image.id` | `RESTRICT` | Упоминание не может существовать без изображения |
+| `cta.icon_id → image.id` | `SET NULL` | CTA может существовать без иконки |
+| `cta.*_owner_id → root.id` | `CASCADE` | CTA является частью владельца |
+| `event.project_id → project.id` | `CASCADE` | Event не существует без Project |
+| `product_characteristic_list.product_id → product.id` | `CASCADE` | Список характеристик является частью Product |
+| `product_characteristic.characteristic_list_id → characteristic_list.id` | `CASCADE` | Элемент не существует без списка |
+| все FK в `*_category` | `CASCADE` | Join-row не имеет смысла без любого участника |
+| все FK в `*_media_mention` | `CASCADE` | Join-row не имеет самостоятельного смысла |
+| `project_person.project_id → project.id` | `CASCADE` | Связь не существует без Project |
+| `project_person.person_id → person.id` | `CASCADE` | Связь не существует без Person |
+| `service_person.service_id → service.id` | `CASCADE` | Связь не существует без Service |
+| `service_person.person_id → person.id` | `CASCADE` | Связь не существует без Person |
+
+## 6. Список Таблиц
 
 ### Таблица `project`
 
@@ -229,7 +267,7 @@ is_active = false
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | sort_order | INTEGER | Да |  | Порядок |
-| image_id | UUID | Да | FK → image.id | Картинка для карточки |
+| image_id | UUID | Нет | FK → image.id | Картинка для карточки |
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
@@ -727,7 +765,7 @@ CHECK (
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK | Идентификатор |
-| image_id | UUID | Да | FK → image.id | Ссылка на изображение СМИ |
+| image_id | UUID | Нет | FK → image.id | Ссылка на изображение СМИ |
 | title | TEXT | Нет | Нет | Название СМИ |
 | text | TEXT | Нет | Нет | Заголовок статьи |
 
