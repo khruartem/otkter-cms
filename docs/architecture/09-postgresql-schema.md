@@ -225,7 +225,7 @@ is_active = false
 
 | Связь | `ON DELETE` | Почему |
 |---|---|---|
-| `project/service/person/product.image_id → image.id` | `RESTRICT` | Основная сущность не может быть без изображения карточки |
+| `project/service/person/product.image_id → image.id` | `RESTRICT` | Используемое карточочное изображение нельзя удалить, пока на него ссылается основная сущность |
 | `project/service/person/product.*_id → image.id` | `SET NULL` | Основная сущность может существовать без изображения |
 | `category.icon_id → image.id` | `SET NULL` | Категория может существовать без иконки |
 | `photo.image_id → image.id` | `RESTRICT` | `Photo` без физического изображения не имеет смысла |
@@ -241,7 +241,7 @@ is_active = false
 | `cta.*_owner_id → root.id` | `CASCADE` | CTA является частью владельца |
 | `event.project_id → project.id` | `CASCADE` | Event не существует без Project |
 | `product_characteristic_list.product_id → product.id` | `CASCADE` | Список характеристик является частью Product |
-| `product_characteristic.characteristic_list_id → characteristic_list.id` | `CASCADE` | Элемент не существует без списка |
+| `product_characteristic.characteristic_list_id → product_characteristic_list.id` | `CASCADE` | Элемент не существует без списка |
 | все FK в `*_category` | `CASCADE` | Join-row не имеет смысла без любого участника |
 | все FK в `*_media_mention` | `CASCADE` | Join-row не имеет самостоятельного смысла |
 | `project_person.project_id → project.id` | `CASCADE` | Связь не существует без Project |
@@ -267,7 +267,7 @@ is_active = false
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | sort_order | INTEGER | Да |  | Порядок |
-| image_id | UUID | Нет | FK → image.id | Картинка для карточки |
+| image_id | UUID | Да | FK → image.id | Картинка для карточки |
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
