@@ -226,7 +226,7 @@ is_active = false
 | Связь | `ON DELETE` | Почему |
 |---|---|---|
 | `project/service/person/product.image_id → image.id` | `RESTRICT` | Используемое карточочное изображение нельзя удалить, пока на него ссылается основная сущность |
-| `project/service/person/product.*_id → image.id` | `SET NULL` | Основная сущность может существовать без изображения |
+| `project/service/person/product.(poster_id, preview_id, icon_id) → image.id` | `SET NULL` | Основная сущность может существовать без изображения |
 | `category.icon_id → image.id` | `SET NULL` | Категория может существовать без иконки |
 | `photo.image_id → image.id` | `RESTRICT` | `Photo` без физического изображения не имеет смысла |
 | `photo.*_owner_id → root.id` | `CASCADE` | Фото является частью конкретного владельца |
@@ -249,7 +249,22 @@ is_active = false
 | `service_person.service_id → service.id` | `CASCADE` | Связь не существует без Service |
 | `service_person.person_id → person.id` | `CASCADE` | Связь не существует без Person |
 
-## 6. Список Таблиц
+## 6. Index strategy
+
+Индексы создаются исходя из реальных сценариев чтения, соединения и удаления данных.
+
+Основные правила:
+
+- `PRIMARY KEY` и `UNIQUE` автоматически создают индексы;
+- дополнительные индексы для таких колонок не создаются;
+- PostgreSQL не создаёт индекс автоматически для `FOREIGN KEY`;
+- FK индексируется, если используется для выборки дочерних записей, JOIN, `ON DELETE CASCADE` или `ON DELETE RESTRICT`;
+- для polymorphic owner columns допускаются partial indexes с условием `IS NOT NULL`;
+- для составных PK учитывается порядок колонок;
+- индексы по boolean-полям не создаются без подтверждённого сценария;
+- сложные и partial indexes добавляются под конкретные запросы и проверяются через `EXPLAIN ANALYZE`.
+
+## 7. Список Таблиц
 
 ### Таблица `project`
 
@@ -770,7 +785,7 @@ CHECK (
 | text | TEXT | Нет | Нет | Заголовок статьи |
 
 ```text
-media_mention.image 0..1 → 1 image
+media_mention.image 1 → 1 image
 ```
 
 #### Ограничения
