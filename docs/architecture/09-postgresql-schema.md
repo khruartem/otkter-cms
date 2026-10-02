@@ -881,7 +881,7 @@ event 1 ─── 1 project
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_event_project_id ON event (project_id);`
 
 ---
 
