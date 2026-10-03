@@ -723,7 +723,7 @@ social_media.icon 0..1 → 1 image
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_social_media_person_id ON event (person_id);`
 
 ---
 
@@ -1018,7 +1018,7 @@ product_characteristic_list 1 ─── 1 product
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_product_characteristic_list_product_id ON event (product_id);`
 
 ---
 
@@ -1047,7 +1047,7 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_product_characteristic_characteristic_list_id ON event (characteristic_list_id);`
 
 ---
 
