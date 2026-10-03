@@ -511,7 +511,7 @@ PRIMARY KEY (project_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_project_category_category_id ON project_category (category_id);`
 
 ---
 
@@ -539,7 +539,7 @@ PRIMARY KEY (service_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_service_category_category_id ON service_category (category_id);`
 
 ---
 
@@ -567,7 +567,7 @@ PRIMARY KEY (person_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_person_category_category_id ON person_category (category_id);`
 
 ---
 
@@ -595,7 +595,7 @@ PRIMARY KEY (product_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_product_category_category_id ON product_category (category_id);`
 
 ---
 
@@ -829,7 +829,7 @@ PRIMARY KEY (project_id, media_mention_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_project_media_mention_media_mention_id ON project_media_mention (media_mention_id);`
 
 ---
 
@@ -857,7 +857,7 @@ PRIMARY KEY(person_id, media_mention_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_person_media_mention_media_mention_id ON person_media_mention (media_mention_id);`
 
 ---
 
