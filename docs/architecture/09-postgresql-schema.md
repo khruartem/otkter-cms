@@ -968,7 +968,8 @@ project_person 1 ─── 1 person
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_project_person_project_id ON project_person (project_id);`
+- `CREATE INDEX idx_project_person_person_id ON project_person (person_id);`
 
 ---
 
@@ -999,7 +1000,8 @@ service_person 1 ─── 1 person
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_service_person_service_id ON service_person (service_id);`
+- `CREATE INDEX idx_service_person_person_id ON service_person (person_id);`
 
 ---
 
