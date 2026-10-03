@@ -312,6 +312,7 @@ project.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_project_image_id ON project (image_id);`
 
 ---
 
@@ -359,6 +360,7 @@ service.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_service_image_id ON service (image_id);`
 
 ---
 
@@ -406,6 +408,7 @@ person.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_person_image_id ON person (image_id);`
 
 ---
 
@@ -455,6 +458,7 @@ product.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_product_image_id ON product (image_id);`
 
 ---
 
@@ -645,6 +649,7 @@ CHECK (
 - `CREATE INDEX idx_photo_service_id ON photo (service_id) WHERE service_id IS NOT NULL;`
 - `CREATE INDEX idx_photo_person_id ON photo (person_id) WHERE person_id IS NOT NULL;`
 - `CREATE INDEX idx_photo_product_id ON photo (product_id) WHERE product_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_image_id ON photo (image_id);`
 
 ---
 
@@ -801,7 +806,7 @@ media_mention.image 1 → 1 image
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_media_mention_image_id ON media_mention (image_id);`
 
 ---
 
