@@ -641,7 +641,10 @@ CHECK (
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_photo_project_id ON photo (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_service_id ON photo (service_id) WHERE service_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_person_id ON photo (person_id) WHERE person_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_product_id ON photo (product_id) WHERE product_id IS NOT NULL;`
 
 ---
 
@@ -692,7 +695,10 @@ CHECK (type IN ('primary', 'secondary'))
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_action_project_id ON action (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_action_service_id ON action (service_id) WHERE service_id IS NOT NULL;`
+- `CREATE INDEX idx_action_person_id ON action (person_id) WHERE person_id IS NOT NULL;`
+- `CREATE INDEX idx_action_product_id ON action (product_id) WHERE product_id IS NOT NULL;`
 
 ---
 
@@ -765,7 +771,8 @@ CHECK (
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_characteristic_project_id ON characteristic (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_characteristic_service_id ON characteristic (service_id) WHERE service_id IS NOT NULL;`
 
 ---
 
@@ -927,7 +934,10 @@ CHECK (
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_cta_project_id ON cta (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_cta_service_id ON cta (service_id) WHERE service_id IS NOT NULL;`
+- `CREATE INDEX idx_cta_person_id ON cta (person_id) WHERE person_id IS NOT NULL;`
+- `CREATE INDEX idx_cta_product_id ON cta (product_id) WHERE product_id IS NOT NULL;`
 
 ---
 
