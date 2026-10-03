@@ -312,6 +312,7 @@ project.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_project_image_id ON project (image_id);`
 
 ---
 
@@ -359,6 +360,7 @@ service.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_service_image_id ON service (image_id);`
 
 ---
 
@@ -406,6 +408,7 @@ person.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_person_image_id ON person (image_id);`
 
 ---
 
@@ -455,6 +458,7 @@ product.icon    0..1 → 1 image
 
 - уникальный индекс по `slug`;
 - индекс по `is_active`, если выборка активных проектов используется часто.
+- `CREATE INDEX idx_product_image_id ON product (image_id);`
 
 ---
 
@@ -511,7 +515,7 @@ PRIMARY KEY (project_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_project_category_category_id ON project_category (category_id);`
 
 ---
 
@@ -539,7 +543,7 @@ PRIMARY KEY (service_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_service_category_category_id ON service_category (category_id);`
 
 ---
 
@@ -567,7 +571,7 @@ PRIMARY KEY (person_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_person_category_category_id ON person_category (category_id);`
 
 ---
 
@@ -595,7 +599,7 @@ PRIMARY KEY (product_id, category_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_product_category_category_id ON product_category (category_id);`
 
 ---
 
@@ -641,7 +645,11 @@ CHECK (
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_photo_project_id ON photo (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_service_id ON photo (service_id) WHERE service_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_person_id ON photo (person_id) WHERE person_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_product_id ON photo (product_id) WHERE product_id IS NOT NULL;`
+- `CREATE INDEX idx_photo_image_id ON photo (image_id);`
 
 ---
 
@@ -692,7 +700,10 @@ CHECK (type IN ('primary', 'secondary'))
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_action_project_id ON action (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_action_service_id ON action (service_id) WHERE service_id IS NOT NULL;`
+- `CREATE INDEX idx_action_person_id ON action (person_id) WHERE person_id IS NOT NULL;`
+- `CREATE INDEX idx_action_product_id ON action (product_id) WHERE product_id IS NOT NULL;`
 
 ---
 
@@ -723,7 +734,7 @@ social_media.icon 0..1 → 1 image
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_social_media_person_id ON event (person_id);`
 
 ---
 
@@ -765,7 +776,8 @@ CHECK (
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_characteristic_project_id ON characteristic (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_characteristic_service_id ON characteristic (service_id) WHERE service_id IS NOT NULL;`
 
 ---
 
@@ -794,7 +806,7 @@ media_mention.image 1 → 1 image
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_media_mention_image_id ON media_mention (image_id);`
 
 ---
 
@@ -822,7 +834,7 @@ PRIMARY KEY (project_id, media_mention_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_project_media_mention_media_mention_id ON project_media_mention (media_mention_id);`
 
 ---
 
@@ -850,7 +862,7 @@ PRIMARY KEY(person_id, media_mention_id)
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_person_media_mention_media_mention_id ON person_media_mention (media_mention_id);`
 
 ---
 
@@ -927,7 +939,10 @@ CHECK (
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_cta_project_id ON cta (project_id) WHERE project_id IS NOT NULL;`
+- `CREATE INDEX idx_cta_service_id ON cta (service_id) WHERE service_id IS NOT NULL;`
+- `CREATE INDEX idx_cta_person_id ON cta (person_id) WHERE person_id IS NOT NULL;`
+- `CREATE INDEX idx_cta_product_id ON cta (product_id) WHERE product_id IS NOT NULL;`
 
 ---
 
@@ -958,7 +973,8 @@ project_person 1 ─── 1 person
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_project_person_project_id ON project_person (project_id);`
+- `CREATE INDEX idx_project_person_person_id ON project_person (person_id);`
 
 ---
 
@@ -989,7 +1005,8 @@ service_person 1 ─── 1 person
 
 #### Индексы
 
-Нет
+- `CREATE INDEX idx_service_person_service_id ON service_person (service_id);`
+- `CREATE INDEX idx_service_person_person_id ON service_person (person_id);`
 
 ---
 
@@ -1018,7 +1035,7 @@ product_characteristic_list 1 ─── 1 product
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_product_characteristic_list_product_id ON event (product_id);`
 
 ---
 
@@ -1047,7 +1064,7 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 #### Индексы
 
-Нет
+`CREATE INDEX idx_product_characteristic_characteristic_list_id ON event (characteristic_list_id);`
 
 ---
 
