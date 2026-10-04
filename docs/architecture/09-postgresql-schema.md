@@ -311,8 +311,6 @@ project.icon    0..1 → 1 image
 #### Индексы
 
 - уникальный индекс по `slug`;
-- индекс по `is_active`, если выборка активных проектов используется часто.
-- `CREATE INDEX idx_project_image_id ON project (image_id);`
 
 ---
 
@@ -359,8 +357,6 @@ service.icon    0..1 → 1 image
 #### Индексы
 
 - уникальный индекс по `slug`;
-- индекс по `is_active`, если выборка активных проектов используется часто.
-- `CREATE INDEX idx_service_image_id ON service (image_id);`
 
 ---
 
@@ -407,8 +403,6 @@ person.icon    0..1 → 1 image
 #### Индексы
 
 - уникальный индекс по `slug`;
-- индекс по `is_active`, если выборка активных проектов используется часто.
-- `CREATE INDEX idx_person_image_id ON person (image_id);`
 
 ---
 
@@ -457,8 +451,6 @@ product.icon    0..1 → 1 image
 #### Индексы
 
 - уникальный индекс по `slug`;
-- индекс по `is_active`, если выборка активных проектов используется часто.
-- `CREATE INDEX idx_product_image_id ON product (image_id);`
 
 ---
 
@@ -734,7 +726,7 @@ social_media.icon 0..1 → 1 image
 
 #### Индексы
 
-`CREATE INDEX idx_social_media_person_id ON event (person_id);`
+`CREATE INDEX idx_social_media_person_id ON social_media (person_id);`
 
 ---
 
@@ -1035,7 +1027,7 @@ product_characteristic_list 1 ─── 1 product
 
 #### Индексы
 
-`CREATE INDEX idx_product_characteristic_list_product_id ON event (product_id);`
+`CREATE INDEX idx_product_characteristic_list_product_id ON product_characteristic_list (product_id);`
 
 ---
 
@@ -1064,7 +1056,7 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 #### Индексы
 
-`CREATE INDEX idx_product_characteristic_characteristic_list_id ON event (characteristic_list_id);`
+`CREATE INDEX idx_product_characteristic_characteristic_list_id ON product_characteristic (characteristic_list_id);`
 
 ---
 
