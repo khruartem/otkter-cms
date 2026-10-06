@@ -27,6 +27,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 - `title` заполнен;
 - `slug` заполнен и уникален внутри соответствующего типа сущности;
 - карточочное изображение `image_id` задано;
+- `short_description` заполнен, поскольку используется в карточках сущностей на публичном сайте (публикация карточки без описания не допускается);
 - все связанные сущности должны существовать и быть валидны;
 - после успешной проверки `publication_status` изменяется на `published`.
 
@@ -49,13 +50,13 @@ Publication validation отвечает за бизнес-полноту сущ�
 | `title` | DB | DB | DB | DB |
 | `slug` | DB | DB | DB | DB |
 | `image_id` | R | R | R | R |
-| `short_description` | TBD | TBD | TBD | TBD |
-| `description` | TBD | TBD | TBD | TBD |
+| `short_description` | R | R | R | R |
+| `description` | O | O | O | O |
 | `poster_id` | O | O | O | O |
 | `preview_id` | O | O | O | O |
 | `icon_id` | O | O | O | O |
-| минимум одна `Category` | TBD | TBD | R | R |
-| `price` | — | — | — | TBD |
+| минимум одна `Category` | R | R | R | R |
+| `price` | — | — | — | R |
 | минимум одна `Photo` | TBD | TBD | TBD | TBD |
 | минимум один `Action` | TBD | TBD | TBD | TBD |
 | минимум один `Person` | TBD | TBD | — | — |
@@ -74,37 +75,14 @@ Publication validation отвечает за бизнес-полноту сущ�
 - `title` заполнен;
 - `slug` заполнен;
 - `slug` уникален среди проектов;
-- `image_id` задан.
+- `image_id` задан;
+- назначена минимум одна `Category`;
+- `short_description` заполнен.
 
 ### Не влияет на публикацию
 
-`is_main` не является условием публикации.
-
-Значение:
-
-- `true` — опубликованный проект отображается в секции «Проекты» на главной странице;
-- `false` — проект не отображается в секции на главной, но остаётся доступным на собственной странице.
-
-`is_active` также не является условием публикации.
-
-Значение:
-
-- `true` — проект действующий;
-- `false` — проект завершён.
-
-Таким образом, допустимы оба состояния:
-
-```text
-publication_status = published
-is_active = true
-```
-
-и:
-
-```text
-publication_status = published
-is_active = false
-```
+- `is_main`;
+- `description`.
 
 ---
 
@@ -117,11 +95,14 @@ is_active = false
 - `title` заполнен;
 - `slug` заполнен;
 - `slug` уникален среди услуг;
-- `image_id` задан.
+- `image_id` задан;
+- назначена минимум одна `Category`;
+- `short_description` заполнен.
 
-### Дополнительные требования
+### Не влияет на публикацию
 
-Требования к категориям, описанию, связанным персонам и характеристикам требуют отдельного бизнес-решения.
+- `is_main`;
+- `description`.
 
 ---
 
@@ -135,23 +116,13 @@ is_active = false
 - `slug` заполнен;
 - `slug` уникален среди персон;
 - `image_id` задан;
-- назначена минимум одна `Category`.
+- назначена минимум одна `Category`;
+- `short_description` заполнен.
 
-Проверка категории выполняется по таблице:
+### Не влияет на публикацию
 
-```text
-person_category
-```
-
-Пример логического условия:
-
-```sql
-EXISTS (
-  SELECT 1
-  FROM person_category
-  WHERE person_id = :person_id
-)
-```
+- `is_main`;
+- `description`.
 
 ---
 
@@ -165,15 +136,14 @@ EXISTS (
 - `slug` заполнен;
 - `slug` уникален среди товаров;
 - `image_id` задан;
-- назначена минимум одна `Category`.
+- назначена минимум одна `Category`;
+- `price` задана;
+- `short_description` заполнен.
 
-### Требует решения
+### Не влияет на публикацию
 
-Необходимо отдельно определить:
-
-- обязательна ли `price`;
-- обязательны ли характеристики товара;
-- может ли публиковаться товар без `ProductCharacteristicList`.
+- `is_main`;
+- `description`.
 
 ---
 
