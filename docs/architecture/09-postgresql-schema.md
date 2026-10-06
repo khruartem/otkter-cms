@@ -177,7 +177,7 @@ DEFAULT 'draft'
 
 `publication_status` отвечает за факт публикации сущности.
 
-`is_active` отвечает за ее бизнес-активность и не заменяет состояние публикации.
+`is_active` отвечает за отображение сущности как действующая/завершенная.
 
 Например:
 
@@ -313,8 +313,8 @@ updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -361,8 +361,8 @@ project.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активная услуга |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -407,8 +407,8 @@ service.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активная персона |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -454,8 +454,8 @@ person.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный товар |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
