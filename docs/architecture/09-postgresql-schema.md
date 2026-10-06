@@ -289,7 +289,7 @@ id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор проекта |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор проекта |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug проекта |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -337,7 +337,7 @@ project.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор услуги |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор услуги |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug услуги |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -383,7 +383,7 @@ service.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор персоны |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug персоны |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -429,7 +429,7 @@ person.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор товара |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор товара |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug товара |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -477,7 +477,7 @@ product.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | text | TEXT | Нет |  | Заголовок |
 | is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
@@ -618,7 +618,7 @@ PRIMARY KEY (product_id, category_id)
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
@@ -668,7 +668,7 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
@@ -722,7 +722,7 @@ CHECK (type IN ('primary', 'secondary'))
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка на ресурс |
@@ -753,7 +753,7 @@ social_media.icon 0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
@@ -796,7 +796,7 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | image_id | UUID | Нет | FK → image.id | Ссылка на изображение СМИ |
 | title | TEXT | Нет | Нет | Название СМИ |
 | text | TEXT | Нет | Нет | Заголовок статьи |
@@ -881,7 +881,7 @@ PRIMARY KEY(person_id, media_mention_id)
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
 | place | TEXT | Нет | Нет | Место проведения |
 | date_time | TIMESTAMPTZ | Нет | Нет | Дата и время |
@@ -912,7 +912,7 @@ event 1 ─── 1 project
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
@@ -961,7 +961,7 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | role | TEXT | Да | Нет | Роль |
@@ -993,7 +993,7 @@ project_person 1 ─── 1 person
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | role | TEXT | Да | Нет | Роль |
@@ -1025,7 +1025,7 @@ service_person 1 ─── 1 person
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | product_id | UUID | Нет | FK → product.id | Ссылка на товар |
 | title | TEXT | Да | Нет | Заголовок |
 | extra | TEXT | Да | Нет | Пояснение |
@@ -1054,7 +1054,7 @@ product_characteristic_list 1 ─── 1 product
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | characteristic_list_id | UUID | Нет | FK → product_characteristic_list.id | Ссылка на список характеристик |
 | color | TEXT | Да | Нет | Цвет |
 | text | TEXT | Да | Нет | Пояснение |
@@ -1083,7 +1083,7 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | storage_key | TEXT | Нет | UNIQUE | Ключ хранилища |
 | mime_type | TEXT | Да | Нет | MIME-тип |
 | width | INTEGER | Да | Нет | Ширина |
