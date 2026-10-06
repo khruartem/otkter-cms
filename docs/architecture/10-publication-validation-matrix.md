@@ -38,6 +38,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 Обозначения:
 
+- `DB` — обязательно всегда на уровне БД;
 - `R` — обязательно для публикации;
 - `O` — необязательно;
 - `—` — не применяется;
@@ -45,8 +46,8 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 | Поле / правило | Project | Service | Person | Product |
 |---|---:|---:|---:|---:|
-| `title` | R | R | R | R |
-| `slug` | R | R | R | R |
+| `title` | DB | DB | DB | DB |
+| `slug` | DB | DB | DB | DB |
 | `image_id` | R | R | R | R |
 | `short_description` | TBD | TBD | TBD | TBD |
 | `description` | TBD | TBD | TBD | TBD |
