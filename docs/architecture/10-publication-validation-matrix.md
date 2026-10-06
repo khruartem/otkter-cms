@@ -49,8 +49,8 @@ Publication validation отвечает за бизнес-полноту сущ�
 | `title` | DB | DB | DB | DB |
 | `slug` | DB | DB | DB | DB |
 | `image_id` | R | R | R | R |
-| `short_description` | TBD | TBD | TBD | TBD |
-| `description` | TBD | TBD | TBD | TBD |
+| `short_description` | R | R | R | R |
+| `description` | O | O | O | O |
 | `poster_id` | O | O | O | O |
 | `preview_id` | O | O | O | O |
 | `icon_id` | O | O | O | O |
