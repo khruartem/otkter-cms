@@ -177,7 +177,7 @@ DEFAULT 'draft'
 
 `publication_status` отвечает за факт публикации сущности.
 
-`is_active` отвечает за ее бизнес-активность и не заменяет состояние публикации.
+`is_active` отвечает за отображение сущности как действующая/завершенная.
 
 Например:
 
@@ -277,7 +277,47 @@ UUID генерируется на стороне PostgreSQL с использо
 id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 ```
 
-## 8. Список Таблиц
+## 8. Timestamp strategy
+
+Для сущностей с полями `created_at` и `updated_at`:
+
+- `created_at` устанавливается при создании записи;
+- `updated_at` устанавливается при создании записи и обновляется application layer при каждом изменении сущности.
+
+На уровне PostgreSQL оба поля имеют начальное значение:
+
+```sql
+created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+```
+
+## 9. Integrity strategy
+
+Правила целостности разделяются между PostgreSQL и application layer.
+
+### PostgreSQL
+
+На уровне БД гарантируются правила, нарушение которых создаёт некорректное состояние данных:
+
+- primary и foreign keys;
+- уникальность business identifiers;
+- допустимые значения ограниченных полей;
+- ровно один владелец polymorphic owned entities;
+- отсутствие дублирующих строк в association tables;
+- корректное поведение при удалении связанных данных.
+
+### Application layer
+
+На уровне application layer проверяются правила, зависящие от состояния и бизнес-контекста:
+
+- полнота данных при переходе `draft → published`;
+- наличие обязательных для публикации изображений;
+- наличие минимум одной категории у `Person` и `Product`;
+- другие требования к публикации, которые не должны ограничивать неполные draft-записи.
+
+Такие проверки выполняются до изменения состояния сущности на `published`.
+
+## 10. Список Таблиц
 
 ### Таблица `project`
 
@@ -289,7 +329,7 @@ id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор проекта |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор проекта |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug проекта |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -299,8 +339,8 @@ id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный проект |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -337,7 +377,7 @@ project.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор услуги |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор услуги |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug услуги |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -347,8 +387,8 @@ project.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активная услуга |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -383,7 +423,7 @@ service.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор персоны |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор персоны |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug персоны |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -393,8 +433,8 @@ service.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активная персона |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -429,7 +469,7 @@ person.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор товара |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор товара |
 | slug | TEXT | Нет | UNIQUE | Уникальный slug товара |
 | title | TEXT | Нет |  | Заголовок |
 | short_description | TEXT | Да |  | Короткое описание |
@@ -440,8 +480,8 @@ person.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать на главной |
-| is_active | BOOLEAN | Нет | DEFAULT true | Активный товар |
+| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
+| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -477,7 +517,7 @@ product.icon    0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | text | TEXT | Нет |  | Заголовок |
 | is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
@@ -618,7 +658,7 @@ PRIMARY KEY (product_id, category_id)
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
@@ -668,7 +708,7 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
@@ -722,7 +762,7 @@ CHECK (type IN ('primary', 'secondary'))
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка на ресурс |
@@ -753,7 +793,7 @@ social_media.icon 0..1 → 1 image
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
@@ -796,7 +836,7 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | image_id | UUID | Нет | FK → image.id | Ссылка на изображение СМИ |
 | title | TEXT | Нет | Нет | Название СМИ |
 | text | TEXT | Нет | Нет | Заголовок статьи |
@@ -881,7 +921,7 @@ PRIMARY KEY(person_id, media_mention_id)
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
 | place | TEXT | Нет | Нет | Место проведения |
 | date_time | TIMESTAMPTZ | Нет | Нет | Дата и время |
@@ -912,7 +952,7 @@ event 1 ─── 1 project
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Да | FK → person.id | Ссылка на персону |
@@ -961,7 +1001,7 @@ CHECK (
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Нет | FK → project.id | Ссылка на проект |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | role | TEXT | Да | Нет | Роль |
@@ -993,7 +1033,7 @@ project_person 1 ─── 1 person
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | role | TEXT | Да | Нет | Роль |
@@ -1025,7 +1065,7 @@ service_person 1 ─── 1 person
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | product_id | UUID | Нет | FK → product.id | Ссылка на товар |
 | title | TEXT | Да | Нет | Заголовок |
 | extra | TEXT | Да | Нет | Пояснение |
@@ -1054,7 +1094,7 @@ product_characteristic_list 1 ─── 1 product
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | characteristic_list_id | UUID | Нет | FK → product_characteristic_list.id | Ссылка на список характеристик |
 | color | TEXT | Да | Нет | Цвет |
 | text | TEXT | Да | Нет | Пояснение |
@@ -1083,7 +1123,7 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
-| id | UUID | Нет | PK | Идентификатор |
+| id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | storage_key | TEXT | Нет | UNIQUE | Ключ хранилища |
 | mime_type | TEXT | Да | Нет | MIME-тип |
 | width | INTEGER | Да | Нет | Ширина |
