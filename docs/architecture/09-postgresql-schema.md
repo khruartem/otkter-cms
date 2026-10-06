@@ -277,7 +277,21 @@ UUID генерируется на стороне PostgreSQL с использо
 id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 ```
 
-## 8. Список Таблиц
+## 8. Timestamp strategy
+
+Для сущностей с полями `created_at` и `updated_at`:
+
+- `created_at` устанавливается при создании записи;
+- `updated_at` устанавливается при создании записи и обновляется application layer при каждом изменении сущности.
+
+На уровне PostgreSQL оба поля имеют начальное значение:
+
+```sql
+created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+```
+
+## 9. Список Таблиц
 
 ### Таблица `project`
 
