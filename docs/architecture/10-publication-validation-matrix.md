@@ -148,7 +148,9 @@ Publication validation отвечает за бизнес-полноту сущ�
 - `image_id` задан;
 - назначена минимум одна `Category`;
 - `price` задана;
-- `short_description` заполнен.
+- `short_description` заполнен;
+- если `requires_characteristics = true`, создан минимум один `ProductCharacteristicList`, содержащий минимум один `ProductCharacteristic`;
+- если `ProductCharacteristicList` создан, он не должен быть пустым.
 
 ### Не влияет на публикацию
 
