@@ -387,7 +387,6 @@ project.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
 | is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
@@ -403,7 +402,6 @@ service.icon    0..1 → 1 image
 #### Ограничения
 
 - `slug` должен быть уникальным.
-- `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
 - `publication_status` может принимать только значения `draft` или `published`.
 
@@ -433,7 +431,6 @@ service.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
 | is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
@@ -449,7 +446,6 @@ person.icon    0..1 → 1 image
 #### Ограничения
 
 - `slug` должен быть уникальным.
-- `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
 - `publication_status` может принимать только значения `draft` или `published`.
 
@@ -481,7 +477,6 @@ person.icon    0..1 → 1 image
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | requires_characteristics | BOOLEAN | Нет | DEFAULT false | Признак, что продукт требует хотя бы 1 списка характеристик |
-| is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
 | is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
@@ -497,7 +492,6 @@ product.icon    0..1 → 1 image
 #### Ограничения
 
 - `slug` должен быть уникальным.
-- `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
 - CHECK (price >= 0).
 - `publication_status` может принимать только значения `draft` или `published`.

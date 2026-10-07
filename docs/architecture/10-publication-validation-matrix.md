@@ -101,7 +101,6 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 ### Не влияет на публикацию
 
-- `is_main`;
 - `description`.
 
 ---
@@ -121,7 +120,6 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 ### Не влияет на публикацию
 
-- `is_main`;
 - `description`.
 
 ---
@@ -154,7 +152,6 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 ### Не влияет на публикацию
 
-- `is_main`;
 - `description`.
 
 ---
