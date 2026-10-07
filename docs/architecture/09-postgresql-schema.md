@@ -175,9 +175,9 @@ DEFAULT 'draft'
 
 ### Отличие от `is_active`
 
-`publication_status` отвечает за факт публикации сущности.
+`publication_status` отвечает за факт публикации проекта.
 
-`is_active` отвечает за отображение сущности как действующая/завершенная.
+`is_active` отвечает за отображение проекта как действующий/завершенный.
 
 Например:
 
@@ -186,7 +186,7 @@ publication_status = published
 is_active = false
 ```
 
-означает, что сущность опубликована, но помечена как неактивная.
+означает, что проект опубликован, но помечен как неактивный.
 
 ### Проверка при публикации
 
@@ -387,7 +387,6 @@ project.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -402,7 +401,6 @@ service.icon    0..1 → 1 image
 #### Ограничения
 
 - `slug` должен быть уникальным.
-- `is_active` по умолчанию равен `true`.
 - `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
@@ -431,7 +429,6 @@ service.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -446,7 +443,6 @@ person.icon    0..1 → 1 image
 #### Ограничения
 
 - `slug` должен быть уникальным.
-- `is_active` по умолчанию равен `true`.
 - `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
@@ -477,7 +473,7 @@ person.icon    0..1 → 1 image
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | requires_characteristics | BOOLEAN | Нет | DEFAULT false | Признак, что продукт требует хотя бы 1 списка характеристик |
-| is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
+| is_available | BOOLEAN | Нет | DEFAULT true | true — товар можно купить, false — купить нельзя |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -492,7 +488,7 @@ product.icon    0..1 → 1 image
 #### Ограничения
 
 - `slug` должен быть уникальным.
-- `is_active` по умолчанию равен `true`.
+- `is_available` по умолчанию равен `true`.
 - CHECK (price >= 0).
 - `publication_status` может принимать только значения `draft` или `published`.
 
