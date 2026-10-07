@@ -480,6 +480,7 @@ person.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
+| requires_characteristics | BOOLEAN | Нет | DEFAULT false | Признак, что продукт требует хотя бы 1 списка характеристик |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
 | is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |

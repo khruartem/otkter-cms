@@ -43,7 +43,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 - `R` — обязательно для публикации;
 - `O` — необязательно;
 - `—` — не применяется;
-- `TBD` — правило требует отдельного бизнес-решения.
+- `C` — обязательно при выполнении дополнительного условия (conditional).
 
 | Поле / правило | Project | Service | Person | Product |
 |---|---:|---:|---:|---:|
@@ -62,7 +62,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 | минимум один `Person` | O | O | — | — |
 | минимум одна `Characteristic` | O | O | — | — |
 | минимум один `Event` | O | — | — | — |
-| минимум один `ProductCharacteristicList` | — | — | — | R |
+| минимум один `ProductCharacteristicList` | — | — | — | C |
 
 ---
 
@@ -127,6 +127,16 @@ Publication validation отвечает за бизнес-полноту сущ�
 ---
 
 ## 7. Product
+
+Для `Product` наличие `ProductCharacteristicList` является условно обязательным.
+
+Если `requires_characteristics = true`, для публикации требуется минимум один
+`ProductCharacteristicList`, содержащий минимум один `ProductCharacteristic`.
+
+Если `requires_characteristics = false`, товар может быть опубликован без списка характеристик.
+
+Если список характеристик создан независимо от значения
+`requires_characteristics`, при публикации он не должен быть пустым.
 
 Перед публикацией товара application layer проверяет:
 
