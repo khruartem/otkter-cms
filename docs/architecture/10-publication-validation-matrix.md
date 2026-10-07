@@ -57,12 +57,12 @@ Publication validation отвечает за бизнес-полноту сущ�
 | `icon_id` | O | O | O | O |
 | минимум одна `Category` | R | R | R | R |
 | `price` | — | — | — | R |
-| минимум одна `Photo` | TBD | TBD | TBD | TBD |
-| минимум один `Action` | TBD | TBD | TBD | TBD |
-| минимум один `Person` | TBD | TBD | — | — |
-| минимум одна `Characteristic` | TBD | TBD | — | — |
-| минимум один `Event` | TBD | — | — | — |
-| минимум один `ProductCharacteristicList` | — | — | — | TBD |
+| минимум одна `Photo` | O | O | O | O |
+| минимум один `Action` | O | O | O | O |
+| минимум один `Person` | O | O | — | — |
+| минимум одна `Characteristic` | O | O | — | — |
+| минимум один `Event` | O | — | — | — |
+| минимум один `ProductCharacteristicList` | — | — | — | R |
 
 ---
 
