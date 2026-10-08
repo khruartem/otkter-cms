@@ -139,10 +139,10 @@ Product 1 ─── 0..N Photo
 Product 1 ─── 0..N ProductCategory
 Product 1 ─── 0..N ProductCharacteristicList
 Product 1 ─── 0..N Action
-Project.image   0..1 ─── 1 Image
-Project.poster  0..1 ─── 1 Image
-Project.preview 0..1 ─── 1 Image
-Project.icon    0..1 ─── 1 Image
+Product.image   0..1 ─── 1 Image
+Product.poster  0..1 ─── 1 Image
+Product.preview 0..1 ─── 1 Image
+Product.icon    0..1 ─── 1 Image
 ```
 
 ## Category
