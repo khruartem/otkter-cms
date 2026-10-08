@@ -33,6 +33,7 @@
 - icon
 - isMain
 - isActive
+- publicationStatus
 
 ### Связи
 
@@ -41,7 +42,7 @@ Project 1 ─── 0..N Photo
 Project 1 ─── 0..N ProjectCategory
 Project 1 ─── 0..N ProjectPerson
 Project 1 ─── 0..N Characteristic
-Project 1 ─── 1..1 ProjectMediaMention
+Project 1 ─── 0..N ProjectMediaMention
 Project 1 ─── 0..N Action
 Project 1 ─── 0..N Event
 Project 1 ─── 0..1 Image
@@ -62,6 +63,7 @@ Project 1 ─── 0..1 Image
 - poster
 - preview
 - icon
+- publicationStatus
 
 ### Связи
 
@@ -89,6 +91,7 @@ Service 1 ─── 0..1 Image
 - poster
 - preview
 - icon
+- publicationStatus
 
 ### Связи
 
@@ -119,12 +122,13 @@ Person 1 ─── 0..1 Image
 - icon
 - isAvailable
 - requiresCharacteristics
+- publicationStatus
 
 ### Связи
 
 ```text
 Product 1 ─── 0..N Photo
-Category 1 ─── 0..N ProductCategory
+Product 1 ─── 0..N ProductCategory
 Product 1 ─── 0..N ProductCharacteristicList
 Product 1 ─── 0..N Action
 Product 1 ─── 0..1 Image
@@ -234,7 +238,7 @@ Owner = Project | Service | Person | Product
 
 ```text
 Action 1 ─── 1..1 Owner
-Category 1 ─── 0..1 Image
+Action 1 ─── 0..1 Image
 
 Owner = Project | Service | Person | Product
 ```
@@ -269,8 +273,7 @@ Owner = Person
 
 ```text
 Characteristic 1 ─── 1..1 Owner
-Characteristic 1 ─── 1..N CharacteristicBlock
-Category 1 ─── 0..1 Image
+Characteristic 1 ─── 0..1 Image
 
 Owner = Project | Service
 ```
@@ -287,8 +290,8 @@ Owner = Project | Service
 ### Связи
 
 ```text
-MediaMention 1 ─── 1..1 ProjectMediaMention
-MediaMention 1 ─── 1..1 PersonMediaMention
+MediaMention 1 ─── 0..N ProjectMediaMention
+MediaMention 1 ─── 0..N PersonMediaMention
 ```
 
 ## ProjectMediaMention
@@ -325,8 +328,7 @@ PersonMediaMention 1 ─── 1 Person
 
 - id
 - place
-- date
-- time
+- dateTime
 - isActive
 
 ### Связи
@@ -349,7 +351,7 @@ Owner = Project
 
 ```text
 CTA 1 ─── 1..1 Owner
-Category 1 ─── 0..1 Image
+CTA 1 ─── 0..1 Image
 
 Owner = Project | Service | Person | Product
 ```
@@ -394,8 +396,8 @@ ServicePerson 1 ─── 1..1 Person
 ### Связи
 
 ```text
-ProductCharacteristicList 1 ─── 0..1 Product
-ProductCharacteristicList 1 ─── 1..N ProductCharacteristic
+ProductCharacteristicList 1 ─── 1..1 Product
+ProductCharacteristicList 1 ─── 0..N ProductCharacteristic
 ```
 
 ## ProductCharacteristic

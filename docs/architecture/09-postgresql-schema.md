@@ -173,7 +173,7 @@ CHECK (
 DEFAULT 'draft'
 ```
 
-### Отличие от `is_active`
+### `is_active` в проекте
 
 `publication_status` отвечает за факт публикации проекта.
 
