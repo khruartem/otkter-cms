@@ -84,6 +84,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 - `is_main`;
 - `is_active`;
+- `category_is_attention`;
 - `description`.
 
 ---

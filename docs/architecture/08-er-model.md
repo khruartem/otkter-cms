@@ -33,6 +33,7 @@
 - icon
 - isMain
 - isActive
+- categoryIsAttention
 - publicationStatus
 
 ### Связи
@@ -153,7 +154,6 @@ Product.icon    0..1 ─── 1 Image
 - id
 - icon
 - text
-- isAttention
 
 ### Связи
 
