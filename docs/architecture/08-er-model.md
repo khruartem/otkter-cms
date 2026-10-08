@@ -101,7 +101,7 @@ Person 1 ─── 0..N PersonCategory
 Person 1 ─── 0..N ProjectPerson
 Person 1 ─── 0..N ServicePerson
 Person 1 ─── 0..N SocialMedia
-Person 1 ─── 1..1 PersonMediaMention
+Person 1 ─── 0..N PersonMediaMention
 Person 1 ─── 0..1 Image
 ```
 
@@ -255,9 +255,8 @@ Owner = Project | Service | Person | Product
 ### Связи
 
 ```text
-SocialMedia 1 ─── 1..1 Owner
-
-Owner = Person
+SocialMedia 1 ─── 1..1 Person
+SocialMedia 1 ─── 0..1 Image
 ```
 
 ## Characteristic
@@ -292,6 +291,7 @@ Owner = Project | Service
 ```text
 MediaMention 1 ─── 0..N ProjectMediaMention
 MediaMention 1 ─── 0..N PersonMediaMention
+MediaMention 1 ─── 1..1 Image
 ```
 
 ## ProjectMediaMention
@@ -312,7 +312,7 @@ ProjectMediaMention 1 ─── 1 Project
 
 ### Атрибуты
 
-- persontId
+- personId
 - mediaMentionId
 
 ### Связи
@@ -334,9 +334,7 @@ PersonMediaMention 1 ─── 1 Person
 ### Связи
 
 ```text
-Event 1 ─── 1..1 Owner
-
-Owner = Project
+Event 1 ─── 1..1 Project
 ```
 
 ## CTA

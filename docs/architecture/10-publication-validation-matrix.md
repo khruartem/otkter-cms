@@ -153,7 +153,8 @@ Publication validation отвечает за бизнес-полноту сущ�
 
 ### Не влияет на публикацию
 
-- `description`.
+- `description`;
+- `is_available`.
 
 ---
 
