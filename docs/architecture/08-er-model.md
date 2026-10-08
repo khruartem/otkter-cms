@@ -41,9 +41,11 @@ Project 1 ─── 0..N Photo
 Project 1 ─── 0..N ProjectCategory
 Project 1 ─── 0..N ProjectPerson
 Project 1 ─── 0..N Characteristic
-Project 1 ─── 0..N MediaMention
+Project 1 ─── 1..1 ProjectMediaMention
 Project 1 ─── 0..N Action
-Project 1 ─── 0..N Occurrence
+Project 1 ─── 0..N Event
+Project 1 ─── 0..1 Image
+
 ```
 
 ## Service
@@ -60,8 +62,6 @@ Project 1 ─── 0..N Occurrence
 - poster
 - preview
 - icon
-- isMain
-- isActive
 
 ### Связи
 
@@ -72,7 +72,7 @@ Service 1 ─── 0..N ServicePerson
 Service 1 ─── 0..N Characteristic
 Service 1 ─── 0..N Action
 Service 1 ─── 0..1 CTA
-Service 1 ─── 0..N Occurrence
+Service 1 ─── 0..1 Image
 ```
 
 ## Person
@@ -89,8 +89,6 @@ Service 1 ─── 0..N Occurrence
 - poster
 - preview
 - icon
-- isMain
-- isActive
 
 ### Связи
 
@@ -100,7 +98,8 @@ Person 1 ─── 0..N PersonCategory
 Person 1 ─── 0..N ProjectPerson
 Person 1 ─── 0..N ServicePerson
 Person 1 ─── 0..N SocialMedia
-Person 1 ─── 0..N MediaMention
+Person 1 ─── 1..1 PersonMediaMention
+Person 1 ─── 0..1 Image
 ```
 
 ## Product
@@ -118,8 +117,8 @@ Person 1 ─── 0..N MediaMention
 - poster
 - preview
 - icon
-- isMain
-- isActive
+- isAvailable
+- requiresCharacteristics
 
 ### Связи
 
@@ -128,6 +127,7 @@ Product 1 ─── 0..N Photo
 Category 1 ─── 0..N ProductCategory
 Product 1 ─── 0..N ProductCharacteristicList
 Product 1 ─── 0..N Action
+Product 1 ─── 0..1 Image
 ```
 
 ## Category
@@ -146,13 +146,13 @@ Category 1 ─── 0..N ProjectCategory
 Category 1 ─── 0..N ServiceCategory
 Category 1 ─── 0..N PersonCategory
 Category 1 ─── 0..N ProductCategory
+Category 1 ─── 0..1 Image
 ```
 
 ## ProjectCategory
 
 ### Атрибуты
 
-- id
 - projectId
 - categoryId
 
@@ -167,7 +167,6 @@ ProjectCategory 1 ─── 1 Project
 
 ### Атрибуты
 
-- id
 - serviceId
 - categoryId
 
@@ -182,7 +181,6 @@ ServiceCategory 1 ─── 1 Service
 
 ### Атрибуты
 
-- id
 - personId
 - categoryId
 
@@ -197,7 +195,6 @@ PersonCategory 1 ─── 1 Person
 
 ### Атрибуты
 
-- id
 - productId
 - categoryId
 
@@ -213,12 +210,12 @@ ProductCategory 1 ─── 1 Product
 ### Атрибуты
 
 - id
-- url
 
 ### Связи
 
 ```text
 Photo 1 ─── 1..1 Owner
+Photo 1 ─── 1..1 Image
 
 Owner = Project | Service | Person | Product
 ```
@@ -228,6 +225,7 @@ Owner = Project | Service | Person | Product
 ### Атрибуты
 
 - id
+- type
 - url
 - icon
 - text
@@ -236,6 +234,7 @@ Owner = Project | Service | Person | Product
 
 ```text
 Action 1 ─── 1..1 Owner
+Category 1 ─── 0..1 Image
 
 Owner = Project | Service | Person | Product
 ```
@@ -254,26 +253,10 @@ Owner = Project | Service | Person | Product
 ```text
 SocialMedia 1 ─── 1..1 Owner
 
-Owner = Project | Service | Person | Product
+Owner = Person
 ```
 
 ## Characteristic
-
-### Атрибуты
-
-- id
-- title
-
-### Связи
-
-```text
-Characteristic 1 ─── 1..1 Owner
-Characteristic 1 ─── 1..N CharacteristicBlock
-
-Owner = Project | Service
-```
-
-## CharacteristicBlock
 
 ### Атрибуты
 
@@ -285,7 +268,11 @@ Owner = Project | Service
 ### Связи
 
 ```text
-CharacteristicBlock 1 ─── 1..1 Characteristic
+Characteristic 1 ─── 1..1 Owner
+Characteristic 1 ─── 1..N CharacteristicBlock
+Category 1 ─── 0..1 Image
+
+Owner = Project | Service
 ```
 
 ## MediaMention
@@ -300,12 +287,39 @@ CharacteristicBlock 1 ─── 1..1 Characteristic
 ### Связи
 
 ```text
-MediaMention 1 ─── 1..1 Owner
-
-Owner = Project | Person
+MediaMention 1 ─── 1..1 ProjectMediaMention
+MediaMention 1 ─── 1..1 PersonMediaMention
 ```
 
-## Occurrence
+## ProjectMediaMention
+
+### Атрибуты
+
+- projectId
+- mediaMentionId
+
+### Связи
+
+```text
+ProjectMediaMention 1 ─── 1 MediaMention
+ProjectMediaMention 1 ─── 1 Project
+```
+
+## PersonMediaMention
+
+### Атрибуты
+
+- persontId
+- mediaMentionId
+
+### Связи
+
+```text
+PersonMediaMention 1 ─── 1 MediaMention
+PersonMediaMention 1 ─── 1 Person
+```
+
+## Event
 
 ### Атрибуты
 
@@ -318,9 +332,9 @@ Owner = Project | Person
 ### Связи
 
 ```text
-Occurrence 1 ─── 1..1 Owner
+Event 1 ─── 1..1 Owner
 
-Owner = Project | Service
+Owner = Project
 ```
 
 ## CTA
@@ -335,6 +349,7 @@ Owner = Project | Service
 
 ```text
 CTA 1 ─── 1..1 Owner
+Category 1 ─── 0..1 Image
 
 Owner = Project | Service | Person | Product
 ```
@@ -379,7 +394,7 @@ ServicePerson 1 ─── 1..1 Person
 ### Связи
 
 ```text
-ProductCharacteristicList 1 ─── 1..1 Product
+ProductCharacteristicList 1 ─── 0..1 Product
 ProductCharacteristicList 1 ─── 1..N ProductCharacteristic
 ```
 
@@ -396,3 +411,13 @@ ProductCharacteristicList 1 ─── 1..N ProductCharacteristic
 ```text
 ProductCharacteristic 1 ─── 1..1 ProductCharacteristicList
 ```
+
+## Image
+
+### Атрибуты
+
+- id
+
+### Связи
+
+Нет
