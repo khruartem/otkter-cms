@@ -55,7 +55,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 | `poster_id` | O | O | O | O |
 | `preview_id` | O | O | O | O |
 | `icon_id` | O | O | O | O |
-| `category_icon` | — | R | — | — |
+| `category_icon_id` | — | R | — | — |
 | минимум одна `Category` | R | - | R | R |
 | `price` | — | — | — | R |
 | минимум одна `Photo` | O | O | O | O |

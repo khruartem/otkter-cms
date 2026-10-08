@@ -312,7 +312,8 @@ updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 
 - полнота данных при переходе `draft → published`;
 - наличие обязательных для публикации изображений;
-- наличие минимум одной категории у `Person` и `Product`;
+- наличие минимум одной категории у `Project`, `Person` и `Product`;
+- наличие `category_icon_id` у `Service`;
 - другие требования к публикации, которые не должны ограничивать неполные draft-записи.
 
 Такие проверки выполняются до изменения состояния сущности на `published`.
@@ -387,17 +388,17 @@ project.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
-| category_icon | UUID | Да | FK → image.id | Иконка категории |
+| category_icon_id | UUID | Да | FK → image.id | Иконка категории |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
-service.image   0..1 → 1 image
-service.poster  0..1 → 1 image
-service.preview 0..1 → 1 image
-service.icon    0..1 → 1 image
-service.category_icon    0..1 → 1 image
+service.image         0..1 → 1 image
+service.poster        0..1 → 1 image
+service.preview       0..1 → 1 image
+service.icon          0..1 → 1 image
+service.category_icon 0..1 → 1 image
 ```
 
 #### Ограничения
