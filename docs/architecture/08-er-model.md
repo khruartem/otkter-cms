@@ -26,7 +26,7 @@
 - title
 - shortDescription
 - description
-- order
+- sortOrder
 - image
 - poster
 - preview
@@ -45,8 +45,10 @@ Project 1 ─── 0..N Characteristic
 Project 1 ─── 0..N ProjectMediaMention
 Project 1 ─── 0..N Action
 Project 1 ─── 0..N Event
-Project 1 ─── 0..1 Image
-
+Project.image   0..1 ─── 1 Image
+Project.poster  0..1 ─── 1 Image
+Project.preview 0..1 ─── 1 Image
+Project.icon    0..1 ─── 1 Image
 ```
 
 ## Service
@@ -58,7 +60,7 @@ Project 1 ─── 0..1 Image
 - title
 - shortDescription
 - description
-- order
+- sortOrder
 - image
 - poster
 - preview
@@ -74,7 +76,10 @@ Service 1 ─── 0..N ServicePerson
 Service 1 ─── 0..N Characteristic
 Service 1 ─── 0..N Action
 Service 1 ─── 0..1 CTA
-Service 1 ─── 0..1 Image
+Service.image   0..1 ─── 1 Image
+Service.poster  0..1 ─── 1 Image
+Service.preview 0..1 ─── 1 Image
+Service.icon    0..1 ─── 1 Image
 ```
 
 ## Person
@@ -86,7 +91,7 @@ Service 1 ─── 0..1 Image
 - title
 - shortDescription
 - description
-- order
+- sortOrder
 - image
 - poster
 - preview
@@ -102,7 +107,10 @@ Person 1 ─── 0..N ProjectPerson
 Person 1 ─── 0..N ServicePerson
 Person 1 ─── 0..N SocialMedia
 Person 1 ─── 0..N PersonMediaMention
-Person 1 ─── 0..1 Image
+Person.image   0..1 ─── 1 Image
+Person.poster  0..1 ─── 1 Image
+Person.preview 0..1 ─── 1 Image
+Person.icon    0..1 ─── 1 Image
 ```
 
 ## Product
@@ -115,7 +123,7 @@ Person 1 ─── 0..1 Image
 - shortDescription
 - description
 - price
-- order
+- sortOrder
 - image
 - poster
 - preview
@@ -131,7 +139,10 @@ Product 1 ─── 0..N Photo
 Product 1 ─── 0..N ProductCategory
 Product 1 ─── 0..N ProductCharacteristicList
 Product 1 ─── 0..N Action
-Product 1 ─── 0..1 Image
+Project.image   0..1 ─── 1 Image
+Project.poster  0..1 ─── 1 Image
+Project.preview 0..1 ─── 1 Image
+Project.icon    0..1 ─── 1 Image
 ```
 
 ## Category
