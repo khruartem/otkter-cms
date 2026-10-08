@@ -807,6 +807,7 @@ CHECK (
 | image_id | UUID | Нет | FK → image.id | Ссылка на изображение СМИ |
 | title | TEXT | Нет | Нет | Название СМИ |
 | text | TEXT | Нет | Нет | Заголовок статьи |
+| url | TEXT | Нет | Нет | Ссылка на исходный материал |
 
 ```text
 media_mention.image 1 → 1 image
