@@ -65,13 +65,13 @@ Project.icon    0..1 ─── 1 Image
 - poster
 - preview
 - icon
+- categoryIcon
 - publicationStatus
 
 ### Связи
 
 ```text
 Service 1 ─── 0..N Photo
-Service 1 ─── 0..N ServiceCategory
 Service 1 ─── 0..N ServicePerson
 Service 1 ─── 0..N Characteristic
 Service 1 ─── 0..N Action
@@ -80,6 +80,7 @@ Service.image   0..1 ─── 1 Image
 Service.poster  0..1 ─── 1 Image
 Service.preview 0..1 ─── 1 Image
 Service.icon    0..1 ─── 1 Image
+Service.categoryIcon 0..1 ─── 1 Image
 ```
 
 ## Person
@@ -158,7 +159,6 @@ Product.icon    0..1 ─── 1 Image
 
 ```text
 Category 1 ─── 0..N ProjectCategory
-Category 1 ─── 0..N ServiceCategory
 Category 1 ─── 0..N PersonCategory
 Category 1 ─── 0..N ProductCategory
 Category 1 ─── 0..1 Image
@@ -176,20 +176,6 @@ Category 1 ─── 0..1 Image
 ```text
 ProjectCategory 1 ─── 1 Category
 ProjectCategory 1 ─── 1 Project
-```
-
-## ServiceCategory
-
-### Атрибуты
-
-- serviceId
-- categoryId
-
-### Связи
-
-```text
-ServiceCategory 1 ─── 1 Category
-ServiceCategory 1 ─── 1 Service
 ```
 
 ## PersonCategory
