@@ -55,7 +55,8 @@ Publication validation отвечает за бизнес-полноту сущ�
 | `poster_id` | O | O | O | O |
 | `preview_id` | O | O | O | O |
 | `icon_id` | O | O | O | O |
-| минимум одна `Category` | R | R | R | R |
+| `category_icon` | — | R | — | — |
+| минимум одна `Category` | R | - | R | R |
 | `price` | — | — | — | R |
 | минимум одна `Photo` | O | O | O | O |
 | минимум один `Action` | O | O | O | O |
@@ -97,7 +98,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 - `slug` заполнен;
 - `slug` уникален среди услуг;
 - `image_id` задан;
-- назначена минимум одна `Category`;
+- `category_icon_id` задан;
 - `short_description` заполнен.
 
 ### Не влияет на публикацию

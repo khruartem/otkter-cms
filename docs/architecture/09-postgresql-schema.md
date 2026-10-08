@@ -387,6 +387,7 @@ project.icon    0..1 → 1 image
 | poster_id | UUID | Да | FK → image.id | Постер |
 | preview_id | UUID | Да | FK → image.id | Превью |
 | icon_id | UUID | Да | FK → image.id | Иконка |
+| category_icon | UUID | Да | FK → image.id | Иконка категории |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -396,6 +397,7 @@ service.image   0..1 → 1 image
 service.poster  0..1 → 1 image
 service.preview 0..1 → 1 image
 service.icon    0..1 → 1 image
+service.category_icon    0..1 → 1 image
 ```
 
 #### Ограничения
@@ -552,34 +554,6 @@ PRIMARY KEY (project_id, category_id)
 #### Индексы
 
 `CREATE INDEX idx_project_category_category_id ON project_category (category_id);`
-
----
-
-### Таблица `service_category`
-
-#### Назначение
-
-Хранит информацию по связи услуг с категориями.
-
-#### Поля
-
-| Поле | Тип | NULL | Ограничения | Описание |
-|---|---|---:|---|---|
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
-| category_id | UUID | Нет | FK → category.id | Ссылка на категорию |
-
-```text
-service_category 1 ─── 1 service
-service_category 1 ─── 1 category
-```
-
-#### Ограничения
-
-PRIMARY KEY (service_id, category_id)
-
-#### Индексы
-
-`CREATE INDEX idx_service_category_category_id ON service_category (category_id);`
 
 ---
 
