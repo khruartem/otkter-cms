@@ -282,6 +282,7 @@ Owner = Project | Service
 - image
 - title
 - text
+- url
 
 ### Связи
 
