@@ -342,6 +342,7 @@ updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
 | is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
+| category_is_attention | BOOLEAN | Нет | DEFAULT false | Признак специального отображения блока категорий |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -360,6 +361,7 @@ project.icon    0..1 → 1 image
 - `slug` должен быть уникальным.
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
+- `category_is_attention` по умолчанию равен `false`.
 - `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
@@ -514,7 +516,6 @@ product.icon    0..1 → 1 image
 | id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | icon_id | UUID | Да | FK → image.id | Иконка |
 | text | TEXT | Нет |  | Заголовок |
-| is_attention | BOOLEAN | Нет | DEFAULT false | Признак "Обратить внимание" |
 
 ```text
 category.icon 0..1 → 1 image
