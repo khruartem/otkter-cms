@@ -231,7 +231,7 @@ is_active = false
 | `photo.image_id → image.id` | `RESTRICT` | `Photo` без физического изображения не имеет смысла |
 | `photo.*_owner_id → root.id` | `CASCADE` | Фото является частью конкретного владельца |
 | `action.icon_id → image.id` | `SET NULL` | Действие может существовать без иконки |
-| `action.*_owner_id → root.id` | `CASCADE` | Action принадлежит владельцу |
+| `action.*_owner_id (product, service, product) → root.id` | `CASCADE` | Action принадлежит владельцу |
 | `social_media.icon_id → image.id` | `SET NULL` | Ссылка на соцсеть может существовать без иконки |
 | `social_media.person_id → person.id` | `CASCADE` | SocialMedia не существует независимо от Person |
 | `characteristic.icon_id → image.id` | `SET NULL` | Характеристика может существовать без иконки |
@@ -678,7 +678,6 @@ CHECK (
 | id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
-| person_id | UUID | Да | FK → person.id | Ссылка на персону |
 | product_id | UUID | Да | FK → product.id | Ссылка на товар |
 | icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка |
@@ -688,7 +687,6 @@ CHECK (
 ```text
 action.project_id  0..1 → 1 project
 action.service_id  0..1 → 1 service
-action.person_id   0..1 → 1 person
 action.product_id  0..1 → 1 product
 action.icon 0..1 → 1 image
 ```
@@ -702,7 +700,6 @@ CHECK (
   num_nonnulls(
     project_id,
     service_id,
-    person_id,
     product_id
   ) = 1
 )
@@ -714,7 +711,6 @@ CHECK (type IN ('primary', 'secondary'))
 
 - `CREATE INDEX idx_action_project_id ON action (project_id) WHERE project_id IS NOT NULL;`
 - `CREATE INDEX idx_action_service_id ON action (service_id) WHERE service_id IS NOT NULL;`
-- `CREATE INDEX idx_action_person_id ON action (person_id) WHERE person_id IS NOT NULL;`
 - `CREATE INDEX idx_action_product_id ON action (product_id) WHERE product_id IS NOT NULL;`
 
 ---

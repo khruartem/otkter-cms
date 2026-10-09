@@ -237,7 +237,7 @@ Owner = Project | Service | Person | Product
 Action 1 ─── 1..1 Owner
 Action 1 ─── 0..1 Image
 
-Owner = Project | Service | Person | Product
+Owner = Project | Service | Product
 ```
 
 ## SocialMedia
