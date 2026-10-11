@@ -346,10 +346,8 @@ Event 1 ─── 1..1 Project
 ### Связи
 
 ```text
-CTA 1 ─── 1..1 Owner
+CTA 1 ─── 1..1 Service
 CTA 1 ─── 0..1 Image
-
-Owner = Project | Service | Person | Product
 ```
 
 ## ProjectPerson
