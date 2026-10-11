@@ -238,7 +238,7 @@ is_active = false
 | `characteristic.*_owner_id → root.id` | `CASCADE` | Характеристика принадлежит одному владельцу |
 | `media_mention.image_id → image.id` | `RESTRICT` | Упоминание не может существовать без изображения |
 | `cta.icon_id → image.id` | `SET NULL` | CTA может существовать без иконки |
-| `cta.*_owner_id → root.id` | `CASCADE` | CTA является частью владельца |
+| `cta.service_id → service.id` | `CASCADE` | CTA является частью владельца |
 | `event.project_id → project.id` | `CASCADE` | Event не существует без Project |
 | `product_characteristic_list.product_id → product.id` | `CASCADE` | Список характеристик является частью Product |
 | `product_characteristic.characteristic_list_id → product_characteristic_list.id` | `CASCADE` | Элемент не существует без списка |
@@ -917,41 +917,22 @@ event 1 ─── 1 project
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
-| project_id | UUID | Да | FK → project.id | Ссылка на проект |
 | service_id | UUID | Да | FK → service.id | Ссылка на услугу |
-| person_id | UUID | Да | FK → person.id | Ссылка на персону |
-| product_id | UUID | Да | FK → product.id | Ссылка на товар |
 | icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
 | text | TEXT | Да | Нет | Подпись |
 
 ```text
-cta.project_id  0..1 → 1 project
 cta.service_id  0..1 → 1 service
-cta.person_id   0..1 → 1 person
-cta.product_id 0..1 → 1 product
+cta.icon_id 0..1 → 1 image
 ```
 
 #### Ограничения
 
-На уровне PostgreSQL используется `CHECK`, гарантирующий, что заполнен ровно один внешний ключ владельца.
-
-```sql
-CHECK (
-  num_nonnulls(
-    project_id,
-    service_id,
-    person_id,
-    product_id
-  ) = 1
-)
-```
+Нет
 
 #### Индексы
 
-- `CREATE INDEX idx_cta_project_id ON cta (project_id) WHERE project_id IS NOT NULL;`
-- `CREATE INDEX idx_cta_service_id ON cta (service_id) WHERE service_id IS NOT NULL;`
-- `CREATE INDEX idx_cta_person_id ON cta (person_id) WHERE person_id IS NOT NULL;`
-- `CREATE INDEX idx_cta_product_id ON cta (product_id) WHERE product_id IS NOT NULL;`
+Нет
 
 ---
 
