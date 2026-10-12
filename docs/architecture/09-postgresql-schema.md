@@ -1013,7 +1013,6 @@ service_person 1 ─── 1 person
 | id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
 | product_id | UUID | Нет | FK → product.id | Ссылка на товар |
 | title | TEXT | Да | Нет | Заголовок |
-| extra | TEXT | Да | Нет | Пояснение |
 
 ```text
 product_characteristic_list 1 ─── 1 product
