@@ -231,7 +231,7 @@ is_active = false
 | `photo.image_id → image.id` | `RESTRICT` | `Photo` без физического изображения не имеет смысла |
 | `photo.*_owner_id → root.id` | `CASCADE` | Фото является частью конкретного владельца |
 | `action.icon_id → image.id` | `SET NULL` | Действие может существовать без иконки |
-| `action.*_owner_id (product, service, product) → root.id` | `CASCADE` | Action принадлежит владельцу |
+| `action.*_owner_id (project, service, product) → root.id` | `CASCADE` | Action принадлежит владельцу |
 | `social_media.icon_id → image.id` | `SET NULL` | Ссылка на соцсеть может существовать без иконки |
 | `social_media.person_id → person.id` | `CASCADE` | SocialMedia не существует независимо от Person |
 | `characteristic.icon_id → image.id` | `SET NULL` | Характеристика может существовать без иконки |
@@ -917,7 +917,7 @@ event 1 ─── 1 project
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
-| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
+| service_id | UUID | Нет | FK → service.id, UNIQUE | Ссылка на услугу |
 | icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
 | text | TEXT | Да | Нет | Подпись |
 
@@ -928,7 +928,7 @@ cta.icon_id 0..1 → 1 image
 
 #### Ограничения
 
-Нет
+`UNIQUE (service_id)`
 
 #### Индексы
 
