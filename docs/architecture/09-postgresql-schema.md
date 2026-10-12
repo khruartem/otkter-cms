@@ -1050,7 +1050,11 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 #### Ограничения
 
-Нет
+```sql
+CHECK (
+  num_nonnulls(color, text) >= 1
+)
+```
 
 #### Индексы
 
