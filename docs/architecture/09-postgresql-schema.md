@@ -917,12 +917,12 @@ event 1 ─── 1 project
 | Поле | Тип | NULL | Ограничения | Описание |
 |---|---|---:|---|---|
 | id | UUID | Нет | PK DEFAULT gen_random_uuid() | Идентификатор |
-| service_id | UUID | Да | FK → service.id | Ссылка на услугу |
+| service_id | UUID | Нет | FK → service.id | Ссылка на услугу |
 | icon_id | UUID | Да | FK → image.id | Ссылка на иконку |
 | text | TEXT | Да | Нет | Подпись |
 
 ```text
-cta.service_id  0..1 → 1 service
+cta.service_id  1 → 1 service
 cta.icon_id 0..1 → 1 image
 ```
 
