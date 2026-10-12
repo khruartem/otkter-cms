@@ -552,7 +552,7 @@ project_category 1 ─── 1 category
 
 #### Ограничения
 
-PRIMARY KEY (project_id, category_id)
+`PRIMARY KEY (project_id, category_id)`
 
 #### Индексы
 
