@@ -248,6 +248,7 @@ is_active = false
 | `project_person.person_id → person.id` | `CASCADE` | Связь не существует без Person |
 | `service_person.service_id → service.id` | `CASCADE` | Связь не существует без Service |
 | `service_person.person_id → person.id` | `CASCADE` | Связь не существует без Person |
+| `service.category_icon_id → image.id` | `RESTRICT` | Иконка категории обязательна для отображения опубликованной Service в слайдере, поэтому используемое изображение нельзя удалить, пока на него ссылается Service. |
 
 ## 6. Index strategy
 
