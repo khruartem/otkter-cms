@@ -327,6 +327,7 @@ PersonMediaMention 1 ─── 1 Person
 - id
 - place
 - dateTime
+- label
 - isActive
 
 ### Связи
