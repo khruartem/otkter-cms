@@ -730,7 +730,7 @@ CHECK (type IN ('primary', 'secondary'))
 | person_id | UUID | Нет | FK → person.id | Ссылка на персону |
 | icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка на ресурс |
-| title | TEXT | Нет | Нет | Заголовок |
+| text | TEXT | Нет | Нет | Текст |
 
 ```text
 social_media 1 ─── 1 person
@@ -1050,7 +1050,11 @@ product_characteristic 1 ─── 1 product_characteristic_list
 
 #### Ограничения
 
-Нет
+```sql
+CHECK (
+  num_nonnulls(color, text) >= 1
+)
+```
 
 #### Индексы
 

@@ -134,6 +134,10 @@ Publication validation отвечает за бизнес-полноту сущ�
 Если `requires_characteristics = true`, для публикации требуется минимум один
 `ProductCharacteristicList`, содержащий минимум один `ProductCharacteristic`.
 
+Если `ProductCharacteristicList` создан, при публикации он должен:
+- иметь заполненный `title`;
+- содержать минимум один `ProductCharacteristic`.
+
 Если `requires_characteristics = false`, товар может быть опубликован без списка характеристик.
 
 Если список характеристик создан независимо от значения
@@ -151,6 +155,7 @@ Publication validation отвечает за бизнес-полноту сущ�
 - `price` задана;
 - `short_description` заполнен;
 - если `requires_characteristics = true`, создан минимум один `ProductCharacteristicList`, содержащий минимум один `ProductCharacteristic`;
+- каждый существующий `ProductCharacteristicList` должен иметь заполненный `title`;
 - если `ProductCharacteristicList` создан, он не должен быть пустым.
 
 ### Не влияет на публикацию
