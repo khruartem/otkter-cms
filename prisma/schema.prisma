@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ActionType {
+  primary
+  secondary
+}
+
+model Project {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  actions Action[] @relation("ProjectAction")
+}
+
+model Service {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  actions Action[] @relation("ServiceAction")
+}
+
+model Person {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+}
+
+model Product {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  actions Action[] @relation("ProductAction")
+}
+
+model Action {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String?    @map("project_id") @db.Uuid
+  serviceId String?    @map("service_id") @db.Uuid
+  productId String?    @map("product_id") @db.Uuid
+  iconId    String?    @map("icon_id") @db.Uuid
+  url       String     @db.Text
+  text      String     @db.Text
+  type      ActionType
+
+  project Project? @relation("ProjectAction", fields: [projectId], references: [id])
+  service Service? @relation("ServiceAction", fields: [serviceId], references: [id])
+  product Product? @relation("ProductAction", fields: [productId], references: [id])
+}
+
+model Image {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storageKey String   @unique @map("storage_key") @db.Text
+  mimeType   String?  @map("mime_type") @db.Text
+  width      Int?
+  height     Int?
+  size       BigInt?
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+}
