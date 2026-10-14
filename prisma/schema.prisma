@@ -21,23 +21,31 @@ enum ActionType {
 model Project {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  actions Action[] @relation("ProjectAction")
+  actions Action[] @relation("ProjectActions")
+
+  @@map("project")
 }
 
 model Service {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  actions Action[] @relation("ServiceAction")
+  actions Action[] @relation("ServiceActions")
+
+  @@map("service")
 }
 
 model Person {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  @@map("person")
 }
 
 model Product {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  actions Action[] @relation("ProductAction")
+  actions Action[] @relation("ProductActions")
+
+  @@map("product")
 }
 
 model Action {
@@ -50,9 +58,12 @@ model Action {
   text      String     @db.Text
   type      ActionType
 
-  project Project? @relation("ProjectAction", fields: [projectId], references: [id])
-  service Service? @relation("ServiceAction", fields: [serviceId], references: [id])
-  product Product? @relation("ProductAction", fields: [productId], references: [id])
+  project Project? @relation("ProjectActions", fields: [projectId], references: [id], onDelete: Cascade)
+  service Service? @relation("ServiceActions", fields: [serviceId], references: [id], onDelete: Cascade)
+  product Product? @relation("ProductActions", fields: [productId], references: [id], onDelete: Cascade)
+  icon    Image?   @relation("ActionIcon", fields: [iconId], references: [id], onDelete: SetNull)
+
+  @@map("action")
 }
 
 model Image {
@@ -63,4 +74,8 @@ model Image {
   height     Int?
   size       BigInt?
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  actions Action[] @relation("ActionIcon")
+
+  @@map("image")
 }
