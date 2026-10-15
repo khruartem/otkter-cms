@@ -13,15 +13,46 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PublicationStatus {
+  draft
+  published
+}
+
 enum ActionType {
   primary
   secondary
 }
 
 model Project {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug                String            @unique @db.Text
+  title               String            @db.Text
+  shortDescription    String?           @map("short_description") @db.Text
+  description         String?           @db.Text
+  sortOrder           Int?              @map("sort_order")
+  imageId             String?           @unique @map("image_id") @db.Uuid
+  posterId            String?           @unique @map("poster_id") @db.Uuid
+  previewId           String?           @unique @map("preview_id") @db.Uuid
+  iconId              String?           @unique @map("icon_id") @db.Uuid
+  isMain              Boolean           @default(false) @map("is_main")
+  isActive            Boolean           @default(true) @map("is_active")
+  categoryIsAttention Boolean           @default(false) @map("category_is_attention")
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  publicationStatus   PublicationStatus @default(draft) @map("publication_status")
 
   actions Action[] @relation("ProjectActions")
+
+  image   Image? @relation("ProjectImage", fields: [imageId], references: [id], onDelete: Restrict)
+  poster  Image? @relation("ProjectPoster", fields: [posterId], references: [id], onDelete: SetNull)
+  preview Image? @relation("ProjectPreview", fields: [previewId], references: [id], onDelete: SetNull)
+  icon    Image? @relation("ProjectIcon", fields: [iconId], references: [id], onDelete: SetNull)
+
+  projectCategories ProjectCategory[] @relation("ProjectCategoryProject")
+
+  photos Photo[] @relation("ProjectPhotos")
+
+  characteristics Characteristic[] @relation("ProjectCharacteristics")
 
   @@map("project")
 }
@@ -31,11 +62,21 @@ model Service {
 
   actions Action[] @relation("ServiceActions")
 
+  photos Photo[] @relation("ServicePhotos")
+
+  characteristics Characteristic[] @relation("ServiceCharacteristics")
+
   @@map("service")
 }
 
 model Person {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  personCategories PersonCategory[] @relation("PersonCategoryPerson")
+
+  photos Photo[] @relation("PersonPhotos")
+
+  socialMedias SocialMedia[] @relation("PersonSocialMedias")
 
   @@map("person")
 }
@@ -45,7 +86,79 @@ model Product {
 
   actions Action[] @relation("ProductActions")
 
+  productCategories ProductCategory[] @relation("ProductCategoryProduct")
+
+  photos Photo[] @relation("ProductPhotos")
+
   @@map("product")
+}
+
+model Category {
+  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  iconId String? @map("icon_id") @db.Uuid
+  text   String  @db.Text
+
+  icon Image? @relation("CategoryIcon", fields: [iconId], references: [id], onDelete: SetNull)
+
+  projectCategories ProjectCategory[] @relation("ProjectCategoryCategory")
+  personCategories  PersonCategory[]  @relation("PersonCategoryCategory")
+  productCategories ProductCategory[] @relation("ProductCategoryCategory")
+
+  @@map("category")
+}
+
+model ProjectCategory {
+  projectId  String @map("project_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  project  Project  @relation("ProjectCategoryProject", fields: [projectId], references: [id], onDelete: Cascade)
+  category Category @relation("ProjectCategoryCategory", fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, categoryId])
+  @@index([categoryId], map: "idx_project_category_category_id")
+  @@map("project_category")
+}
+
+model PersonCategory {
+  personId   String @map("person_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  person   Person   @relation("PersonCategoryPerson", fields: [personId], references: [id], onDelete: Cascade)
+  category Category @relation("PersonCategoryCategory", fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([personId, categoryId])
+  @@index([categoryId], map: "idx_person_category_category_id")
+  @@map("person_category")
+}
+
+model ProductCategory {
+  productId  String @map("product_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+
+  product  Product  @relation("ProductCategoryProduct", fields: [productId], references: [id], onDelete: Cascade)
+  category Category @relation("ProductCategoryCategory", fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+  @@index([categoryId], map: "idx_product_category_category_id")
+  @@map("product_category")
+}
+
+model Photo {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String? @map("project_id") @db.Uuid
+  serviceId String? @map("service_id") @db.Uuid
+  personId  String? @map("person_id") @db.Uuid
+  productId String? @map("product_id") @db.Uuid
+  imageId   String  @map("image_id") @db.Uuid
+
+  project Project? @relation("ProjectPhotos", fields: [projectId], references: [id], onDelete: Cascade)
+  service Service? @relation("ServicePhotos", fields: [serviceId], references: [id], onDelete: Cascade)
+  person  Person?  @relation("PersonPhotos", fields: [personId], references: [id], onDelete: Cascade)
+  product Product? @relation("ProductPhotos", fields: [productId], references: [id], onDelete: Cascade)
+  image   Image    @relation("PhotoImage", fields: [imageId], references: [id], onDelete: Restrict)
+
+  @@index([imageId], map: "idx_photo_image_id")
+  @@map("photo")
 }
 
 model Action {
@@ -66,6 +179,35 @@ model Action {
   @@map("action")
 }
 
+model SocialMedia {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  personId String  @map("person_id") @db.Uuid
+  iconId   String? @map("icon_id") @db.Uuid
+  url      String  @db.Text
+  text     String  @db.Text
+
+  person Person @relation("PersonSocialMedias", fields: [personId], references: [id], onDelete: Cascade)
+  icon   Image? @relation("SocialMediaIcon", fields: [iconId], references: [id], onDelete: SetNull)
+
+  @@index([personId], map: "idx_social_media_person_id")
+  @@map("social_media")
+}
+
+model Characteristic {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String?  @map("project_id") @db.Uuid
+  serviceId String?  @map("service_id") @db.Uuid
+  iconId    String?  @map("icon_id") @db.Uuid
+  title     String   @db.Text
+  value     String[] @db.Text
+
+  project Project? @relation("ProjectCharacteristics", fields: [projectId], references: [id], onDelete: Cascade)
+  service Service? @relation("ServiceCharacteristics", fields: [serviceId], references: [id], onDelete: Cascade)
+  icon    Image?   @relation("CharacteristicIcon", fields: [iconId], references: [id], onDelete: SetNull)
+
+  @@map("characteristic")
+}
+
 model Image {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   storageKey String   @unique @map("storage_key") @db.Text
@@ -76,6 +218,19 @@ model Image {
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
 
   actions Action[] @relation("ActionIcon")
+
+  projectImage   Project? @relation("ProjectImage")
+  projectPoster  Project? @relation("ProjectPoster")
+  projectPreview Project? @relation("ProjectPreview")
+  projectIcon    Project? @relation("ProjectIcon")
+
+  categoryIcons Category[] @relation("CategoryIcon")
+
+  photos Photo[] @relation("PhotoImage")
+
+  characteristicIcons Characteristic[] @relation("CharacteristicIcon")
+
+  socialMediaIcons SocialMedia[] @relation("SocialMediaIcon")
 
   @@map("image")
 }

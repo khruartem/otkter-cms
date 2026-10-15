@@ -159,13 +159,7 @@ project/esenin/poster-abc123.webp
 publication_status
 ```
 
-Для поля используется `TEXT` с ограничением:
-
-```sql
-CHECK (
-  publication_status IN ('draft', 'published')
-)
-```
+Для поля используется тип `publication_status`:
 
 Значение по умолчанию:
 
@@ -319,7 +313,15 @@ updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 
 Такие проверки выполняются до изменения состояния сущности на `published`.
 
-## 10. Список Таблиц
+## 10. Статусы
+
+### Статусы для публикации `publication_status`
+
+```sql
+CREATE TYPE publication_status AS ENUM ('draft', 'published');
+```
+
+## 11. Список Таблиц
 
 ### Таблица `project`
 
@@ -337,29 +339,33 @@ updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | sort_order | INTEGER | Да |  | Порядок |
-| image_id | UUID | Да | FK → image.id | Картинка для карточки |
-| poster_id | UUID | Да | FK → image.id | Постер |
-| preview_id | UUID | Да | FK → image.id | Превью |
-| icon_id | UUID | Да | FK → image.id | Иконка |
+| image_id | UUID | Да | UNIQUE, FK → image.id | Картинка для карточки |
+| poster_id | UUID | Да | UNIQUE, FK → image.id | Постер |
+| preview_id | UUID | Да | UNIQUE, FK → image.id | Превью |
+| icon_id | UUID | Да | UNIQUE, FK → image.id | Иконка |
 | is_main | BOOLEAN | Нет | DEFAULT false | Отображать проект в секции «Проекты» на главной странице |
 | is_active | BOOLEAN | Нет | DEFAULT true | true — действующий, false — завершён |
 | category_is_attention | BOOLEAN | Нет | DEFAULT false | Признак специального отображения блока категорий |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
-| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
+| publication_status | publication_status | Нет | DEFAULT 'draft' | Состояние публикации |
 
 #### Связи
 
 ```text
-project.image   0..1 → 1 image
-project.poster  0..1 → 1 image
-project.preview 0..1 → 1 image
-project.icon    0..1 → 1 image
+project.image   0..1 ↔ 0..1 image
+project.poster  0..1 ↔ 0..1 image
+project.preview 0..1 ↔ 0..1 image
+project.icon    0..1 ↔ 0..1 image
 ```
 
 #### Ограничения
 
 - `slug` должен быть уникальным.
+- `image_id` должен быть уникальным.
+- `poster_id` должен быть уникальным.
+- `preview_id` должен быть уникальным.
+- `icon_id` должен быть уникальным.
 - `is_main` по умолчанию равен `false`.
 - `is_active` по умолчанию равен `true`.
 - `category_is_attention` по умолчанию равен `false`.
@@ -368,6 +374,10 @@ project.icon    0..1 → 1 image
 #### Индексы
 
 - уникальный индекс по `slug`;
+- уникальный индекс по `image_id`;
+- уникальный индекс по `poster_id`;
+- уникальный индекс по `preview_id`;
+- уникальный индекс по `icon_id`.
 
 ---
 
@@ -387,31 +397,39 @@ project.icon    0..1 → 1 image
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | sort_order | INTEGER | Да |  | Порядок |
-| image_id | UUID | Да | FK → image.id | Картинка карточки |
-| poster_id | UUID | Да | FK → image.id | Постер |
-| preview_id | UUID | Да | FK → image.id | Превью |
-| icon_id | UUID | Да | FK → image.id | Иконка |
+| image_id | UUID | Да | UNIQUE, FK → image.id | Картинка карточки |
+| poster_id | UUID | Да | UNIQUE, FK → image.id | Постер |
+| preview_id | UUID | Да | UNIQUE, FK → image.id | Превью |
+| icon_id | UUID | Да | UNIQUE, FK → image.id | Иконка |
 | category_icon_id | UUID | Да | FK → image.id | Иконка категории |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
-| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
+| publication_status | publication_status | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
-service.image         0..1 → 1 image
-service.poster        0..1 → 1 image
-service.preview       0..1 → 1 image
-service.icon          0..1 → 1 image
+service.image   0..1 ↔ 0..1 image
+service.poster  0..1 ↔ 0..1 image
+service.preview 0..1 ↔ 0..1 image
+service.icon    0..1 ↔ 0..1 image
 service.category_icon 0..1 → 1 image
 ```
 
 #### Ограничения
 
 - `slug` должен быть уникальным.
+- `image_id` должен быть уникальным.
+- `poster_id` должен быть уникальным.
+- `preview_id` должен быть уникальным.
+- `icon_id` должен быть уникальным.
 - `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
 - уникальный индекс по `slug`;
+- уникальный индекс по `image_id`;
+- уникальный индекс по `poster_id`;
+- уникальный индекс по `preview_id`;
+- уникальный индекс по `icon_id`.
 
 ---
 
@@ -431,29 +449,37 @@ service.category_icon 0..1 → 1 image
 | short_description | TEXT | Да |  | Короткое описание |
 | description | TEXT | Да |  | Основное описание |
 | sort_order | INTEGER | Да |  | Порядок |
-| image_id | UUID | Да | FK → image.id | Картинка карточки |
-| poster_id | UUID | Да | FK → image.id | Постер |
-| preview_id | UUID | Да | FK → image.id | Превью |
-| icon_id | UUID | Да | FK → image.id | Иконка |
+| image_id | UUID | Да | UNIQUE, FK → image.id | Картинка карточки |
+| poster_id | UUID | Да | UNIQUE, FK → image.id | Постер |
+| preview_id | UUID | Да | UNIQUE, FK → image.id | Превью |
+| icon_id | UUID | Да | UNIQUE, FK → image.id | Иконка |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
-| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
+| publication_status | publication_status | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
-person.image   0..1 → 1 image
-person.poster  0..1 → 1 image
-person.preview 0..1 → 1 image
-person.icon    0..1 → 1 image
+person.image   0..1 ↔ 0..1 image
+person.poster  0..1 ↔ 0..1 image
+person.preview 0..1 ↔ 0..1 image
+person.icon    0..1 ↔ 0..1 image
 ```
 
 #### Ограничения
 
 - `slug` должен быть уникальным.
+- `image_id` должен быть уникальным.
+- `poster_id` должен быть уникальным.
+- `preview_id` должен быть уникальным.
+- `icon_id` должен быть уникальным.
 - `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
 - уникальный индекс по `slug`;
+- уникальный индекс по `image_id`;
+- уникальный индекс по `poster_id`;
+- уникальный индекс по `preview_id`;
+- уникальный индекс по `icon_id`,
 
 ---
 
@@ -474,33 +500,41 @@ person.icon    0..1 → 1 image
 | description | TEXT | Да |  | Основное описание |
 | price | NUMERIC(10,2) | Да |  | Цена |
 | sort_order | INTEGER | Да |  | Порядок |
-| image_id | UUID | Да | FK → image.id | Картинка карточки |
-| poster_id | UUID | Да | FK → image.id | Постер |
-| preview_id | UUID | Да | FK → image.id | Превью |
-| icon_id | UUID | Да | FK → image.id | Иконка |
+| image_id | UUID | Да | UNIQUE, FK → image.id | Картинка карточки |
+| poster_id | UUID | Да | UNIQUE, FK → image.id | Постер |
+| preview_id | UUID | Да | UNIQUE, FK → image.id | Превью |
+| icon_id | UUID | Да | UNIQUE, FK → image.id | Иконка |
 | requires_characteristics | BOOLEAN | Нет | DEFAULT false | Признак, что продукт требует хотя бы 1 списка характеристик |
 | is_available | BOOLEAN | Нет | DEFAULT true | true — товар можно купить, false — купить нельзя |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
-| publication_status | TEXT | Нет | DEFAULT 'draft' | Состояние публикации |
+| publication_status | publication_status | Нет | DEFAULT 'draft' | Состояние публикации |
 
 ```text
-product.image   0..1 → 1 image
-product.poster  0..1 → 1 image
-product.preview 0..1 → 1 image
-product.icon    0..1 → 1 image
+product.image   0..1 ↔ 0..1 image
+product.poster  0..1 ↔ 0..1 image
+product.preview 0..1 ↔ 0..1 image
+product.icon    0..1 ↔ 0..1 image
 ```
 
 #### Ограничения
 
 - `slug` должен быть уникальным.
+- `image_id` должен быть уникальным.
+- `poster_id` должен быть уникальным.
+- `preview_id` должен быть уникальным.
+- `icon_id` должен быть уникальным.
+- `publication_status` может принимать только значения `draft` или `published`.
 - `is_available` по умолчанию равен `true`.
 - CHECK (price >= 0).
-- `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
 
 - уникальный индекс по `slug`;
+- уникальный индекс по `image_id`;
+- уникальный индекс по `poster_id`;
+- уникальный индекс по `preview_id`;
+- уникальный индекс по `icon_id`.
 
 ---
 
