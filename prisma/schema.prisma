@@ -276,7 +276,7 @@ model Image {
 
   socialMediaIcons SocialMedia[] @relation("SocialMediaIcon")
 
-  mediaMention MediaMention[] @relation("MediaMentionImage")
+  mediaMentions MediaMention[] @relation("MediaMentionImage")
 
   @@map("image")
 }
