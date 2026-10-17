@@ -41,7 +41,7 @@ model Project {
   updatedAt           DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   publicationStatus   PublicationStatus @default(draft) @map("publication_status")
 
-  actions Action[] @relation("ProjectActions")
+  actions Action[]
 
   image   Image? @relation("ProjectImage", fields: [imageId], references: [id], onDelete: Restrict)
   poster  Image? @relation("ProjectPoster", fields: [posterId], references: [id], onDelete: SetNull)
@@ -50,9 +50,9 @@ model Project {
 
   projectCategories ProjectCategory[]
 
-  photos Photo[] @relation("ProjectPhotos")
+  photos Photo[]
 
-  characteristics Characteristic[] @relation("ProjectCharacteristics")
+  characteristics Characteristic[]
 
   projectMediaMentions ProjectMediaMention[]
 
@@ -62,11 +62,11 @@ model Project {
 model Service {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  actions Action[] @relation("ServiceActions")
+  actions Action[]
 
-  photos Photo[] @relation("ServicePhotos")
+  photos Photo[]
 
-  characteristics Characteristic[] @relation("ServiceCharacteristics")
+  characteristics Characteristic[]
 
   @@map("service")
 }
@@ -76,9 +76,9 @@ model Person {
 
   personCategories PersonCategory[]
 
-  photos Photo[] @relation("PersonPhotos")
+  photos Photo[]
 
-  socialMedias SocialMedia[] @relation("PersonSocialMedias")
+  socialMedias SocialMedia[]
 
   personMediaMentions PersonMediaMention[]
 
@@ -88,11 +88,11 @@ model Person {
 model Product {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  actions Action[] @relation("ProductActions")
+  actions Action[]
 
   productCategories ProductCategory[]
 
-  photos Photo[] @relation("ProductPhotos")
+  photos Photo[]
 
   @@map("product")
 }
@@ -102,7 +102,7 @@ model Category {
   iconId String? @map("icon_id") @db.Uuid
   text   String  @db.Text
 
-  icon Image? @relation("CategoryIcon", fields: [iconId], references: [id], onDelete: SetNull)
+  icon Image? @relation(fields: [iconId], references: [id], onDelete: SetNull)
 
   projectCategories ProjectCategory[]
   personCategories  PersonCategory[]
@@ -155,11 +155,11 @@ model Photo {
   productId String? @map("product_id") @db.Uuid
   imageId   String  @map("image_id") @db.Uuid
 
-  project Project? @relation("ProjectPhotos", fields: [projectId], references: [id], onDelete: Cascade)
-  service Service? @relation("ServicePhotos", fields: [serviceId], references: [id], onDelete: Cascade)
-  person  Person?  @relation("PersonPhotos", fields: [personId], references: [id], onDelete: Cascade)
-  product Product? @relation("ProductPhotos", fields: [productId], references: [id], onDelete: Cascade)
-  image   Image    @relation("PhotoImage", fields: [imageId], references: [id], onDelete: Restrict)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  person  Person?  @relation(fields: [personId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  image   Image    @relation(fields: [imageId], references: [id], onDelete: Restrict)
 
   @@index([imageId], map: "idx_photo_image_id")
   @@map("photo")
@@ -175,10 +175,10 @@ model Action {
   text      String     @db.Text
   type      ActionType
 
-  project Project? @relation("ProjectActions", fields: [projectId], references: [id], onDelete: Cascade)
-  service Service? @relation("ServiceActions", fields: [serviceId], references: [id], onDelete: Cascade)
-  product Product? @relation("ProductActions", fields: [productId], references: [id], onDelete: Cascade)
-  icon    Image?   @relation("ActionIcon", fields: [iconId], references: [id], onDelete: SetNull)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  icon    Image?   @relation(fields: [iconId], references: [id], onDelete: SetNull)
 
   @@map("action")
 }
@@ -190,8 +190,8 @@ model SocialMedia {
   url      String  @db.Text
   text     String  @db.Text
 
-  person Person @relation("PersonSocialMedias", fields: [personId], references: [id], onDelete: Cascade)
-  icon   Image? @relation("SocialMediaIcon", fields: [iconId], references: [id], onDelete: SetNull)
+  person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+  icon   Image? @relation(fields: [iconId], references: [id], onDelete: SetNull)
 
   @@index([personId], map: "idx_social_media_person_id")
   @@map("social_media")
@@ -205,9 +205,9 @@ model Characteristic {
   title     String   @db.Text
   value     String[] @db.Text
 
-  project Project? @relation("ProjectCharacteristics", fields: [projectId], references: [id], onDelete: Cascade)
-  service Service? @relation("ServiceCharacteristics", fields: [serviceId], references: [id], onDelete: Cascade)
-  icon    Image?   @relation("CharacteristicIcon", fields: [iconId], references: [id], onDelete: SetNull)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  icon    Image?   @relation(fields: [iconId], references: [id], onDelete: SetNull)
 
   @@map("characteristic")
 }
@@ -219,7 +219,7 @@ model MediaMention {
   text    String @db.Text
   url     String @db.Text
 
-  image Image @relation("MediaMentionImage", fields: [imageId], references: [id], onDelete: Restrict)
+  image Image @relation(fields: [imageId], references: [id], onDelete: Restrict)
 
   projectMediaMentions ProjectMediaMention[]
   personMediaMentions  PersonMediaMention[]
@@ -261,22 +261,22 @@ model Image {
   size       BigInt?
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
 
-  actions Action[] @relation("ActionIcon")
+  actions Action[]
 
   projectImage   Project? @relation("ProjectImage")
   projectPoster  Project? @relation("ProjectPoster")
   projectPreview Project? @relation("ProjectPreview")
   projectIcon    Project? @relation("ProjectIcon")
 
-  categoryIcons Category[] @relation("CategoryIcon")
+  categoryIcons Category[]
 
-  photos Photo[] @relation("PhotoImage")
+  photos Photo[]
 
-  characteristicIcons Characteristic[] @relation("CharacteristicIcon")
+  characteristicIcons Characteristic[]
 
-  socialMediaIcons SocialMedia[] @relation("SocialMediaIcon")
+  socialMediaIcons SocialMedia[]
 
-  mediaMentions MediaMention[] @relation("MediaMentionImage")
+  mediaMentions MediaMention[]
 
   @@map("image")
 }
