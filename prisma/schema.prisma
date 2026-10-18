@@ -56,11 +56,32 @@ model Project {
 
   projectMediaMentions ProjectMediaMention[]
 
+  events Event[]
+
   @@map("project")
 }
 
 model Service {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug              String            @unique @db.Text
+  title             String            @db.Text
+  shortDescription  String?           @map("short_description") @db.Text
+  description       String?           @db.Text
+  sortOrder         Int?              @map("sort_order")
+  imageId           String?           @unique @map("image_id") @db.Uuid
+  posterId          String?           @unique @map("poster_id") @db.Uuid
+  previewId         String?           @unique @map("preview_id") @db.Uuid
+  iconId            String?           @unique @map("icon_id") @db.Uuid
+  categoryIconId    String?           @unique @map("category_icon_id") @db.Uuid
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  publicationStatus PublicationStatus @default(draft) @map("publication_status")
+
+  image        Image? @relation("ServiceImage", fields: [imageId], references: [id], onDelete: Restrict)
+  poster       Image? @relation("ServicePoster", fields: [posterId], references: [id], onDelete: SetNull)
+  preview      Image? @relation("ServicePreview", fields: [previewId], references: [id], onDelete: SetNull)
+  icon         Image? @relation("ServiceIcon", fields: [iconId], references: [id], onDelete: SetNull)
+  categoryIcon Image? @relation("ServiceCategoryIcon", fields: [categoryIconId], references: [id], onDelete: Restrict)
 
   actions Action[]
 
@@ -72,7 +93,24 @@ model Service {
 }
 
 model Person {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug              String            @unique @db.Text
+  title             String            @db.Text
+  shortDescription  String?           @map("short_description") @db.Text
+  description       String?           @db.Text
+  sortOrder         Int?              @map("sort_order")
+  imageId           String?           @unique @map("image_id") @db.Uuid
+  posterId          String?           @unique @map("poster_id") @db.Uuid
+  previewId         String?           @unique @map("preview_id") @db.Uuid
+  iconId            String?           @unique @map("icon_id") @db.Uuid
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  publicationStatus PublicationStatus @default(draft) @map("publication_status")
+
+  image   Image? @relation("PersonImage", fields: [imageId], references: [id], onDelete: Restrict)
+  poster  Image? @relation("PersonPoster", fields: [posterId], references: [id], onDelete: SetNull)
+  preview Image? @relation("PersonPreview", fields: [previewId], references: [id], onDelete: SetNull)
+  icon    Image? @relation("PersonIcon", fields: [iconId], references: [id], onDelete: SetNull)
 
   personCategories PersonCategory[]
 
@@ -86,7 +124,27 @@ model Person {
 }
 
 model Product {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                      String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug                    String            @unique @db.Text
+  title                   String            @db.Text
+  shortDescription        String?           @map("short_description") @db.Text
+  description             String?           @db.Text
+  price                   Decimal?          @db.Decimal(10, 2)
+  sortOrder               Int?              @map("sort_order")
+  imageId                 String?           @unique @map("image_id") @db.Uuid
+  posterId                String?           @unique @map("poster_id") @db.Uuid
+  previewId               String?           @unique @map("preview_id") @db.Uuid
+  iconId                  String?           @unique @map("icon_id") @db.Uuid
+  requiresCharacteristics Boolean           @default(false) @map("requires_characteristics")
+  isAvailable             Boolean           @default(true) @map("is_available")
+  createdAt               DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt               DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+  publicationStatus       PublicationStatus @default(draft) @map("publication_status")
+
+  image   Image? @relation("ProductImage", fields: [imageId], references: [id], onDelete: Restrict)
+  poster  Image? @relation("ProductPoster", fields: [posterId], references: [id], onDelete: SetNull)
+  preview Image? @relation("ProductPreview", fields: [previewId], references: [id], onDelete: SetNull)
+  icon    Image? @relation("ProductIcon", fields: [iconId], references: [id], onDelete: SetNull)
 
   actions Action[]
 
@@ -252,6 +310,20 @@ model PersonMediaMention {
   @@map("person_media_mention")
 }
 
+model Event {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String   @map("project_id") @db.Uuid
+  place     String   @db.Text
+  dateTime  DateTime @map("date_time") @db.Timestamptz
+  label     String?   @db.Text
+  isActive  Boolean  @default(true) @map("is_active")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "idx_event_project_id")
+  @@map("event")
+}
+
 model Image {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   storageKey String   @unique @map("storage_key") @db.Text
@@ -267,6 +339,22 @@ model Image {
   projectPoster  Project? @relation("ProjectPoster")
   projectPreview Project? @relation("ProjectPreview")
   projectIcon    Project? @relation("ProjectIcon")
+
+  serviceImage        Service? @relation("ServiceImage")
+  servicePoster       Service? @relation("ServicePoster")
+  servicePreview      Service? @relation("ServicePreview")
+  serviceIcon         Service? @relation("ServiceIcon")
+  serviceCategoryIcon Service? @relation("ServiceCategoryIcon")
+
+  personImage   Person? @relation("PersonImage")
+  personPoster  Person? @relation("PersonPoster")
+  personPreview Person? @relation("PersonPreview")
+  personIcon    Person? @relation("PersonIcon")
+
+  productImage   Product? @relation("ProductImage")
+  productPoster  Product? @relation("ProductPoster")
+  productPreview Product? @relation("ProductPreview")
+  productIcon    Product? @relation("ProductIcon")
 
   categoryIcons Category[]
 
