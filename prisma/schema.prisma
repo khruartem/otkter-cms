@@ -16,11 +16,15 @@ datasource db {
 enum PublicationStatus {
   draft
   published
+
+  @@map("publication_status")
 }
 
 enum ActionType {
   primary
   secondary
+
+  @@map("action_type")
 }
 
 model Project {

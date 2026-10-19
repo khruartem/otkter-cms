@@ -202,7 +202,7 @@ is_active = false
 Пример поля:
 
 ```text
-| publication_status | TEXT | Нет | DEFAULT 'draft', CHECK (...) | Состояние публикации |
+publication_status | publication_status | NOT NULL | DEFAULT 'draft' | Состояние публикации |
 ```
 
 ## 5. Delete policy
@@ -319,6 +319,12 @@ updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 
 ```sql
 CREATE TYPE publication_status AS ENUM ('draft', 'published');
+```
+
+### Статусы для действий `action_type`
+
+```sql
+CREATE TYPE action_type AS ENUM ('primary', 'secondary');
 ```
 
 ## 11. Список Таблиц
@@ -719,7 +725,7 @@ CHECK (
 | icon_id | UUID | Да | FK → image.id | Ссылка на изображение |
 | url | TEXT | Нет | Нет | Ссылка |
 | text | TEXT | Нет | Нет | Лейбл |
-| type | TEXT | Нет | Доступны только значения: `primary`, `secondary` | Тип действия |
+| type | action_type | Нет | Доступны только значения: `primary`, `secondary` | Тип действия |
 
 ```text
 action.project_id  0..1 → 1 project
@@ -741,8 +747,6 @@ CHECK (
   ) = 1
 )
 ```
-
-CHECK (type IN ('primary', 'secondary'))
 
 #### Индексы
 
