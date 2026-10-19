@@ -161,6 +161,8 @@ model Product {
 
   photos Photo[]
 
+  characteristicLists ProductCharacteristicList[]
+
   @@map("product")
 }
 
@@ -373,6 +375,31 @@ model ServicePerson {
   @@index([serviceId], map: "idx_service_person_service_id")
   @@index([personId], map: "idx_service_person_person_id")
   @@map("service_person")
+}
+
+model ProductCharacteristicList {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  productId String  @map("product_id") @db.Uuid
+  title     String? @db.Text
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  characteristics ProductCharacteristic[]
+
+  @@index([productId], map: "idx_product_characteristic_list_product_id")
+  @@map("product_characteristic_list")
+}
+
+model ProductCharacteristic {
+  id                   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  characteristicListId String  @map("characteristic_list_id") @db.Uuid
+  color                String? @db.Text
+  text                 String? @db.Text
+
+  characteristicList ProductCharacteristicList @relation(fields: [characteristicListId], references: [id], onDelete: Cascade)
+
+  @@index([characteristicListId], map: "idx_product_characteristic_characteristic_list_id")
+  @@map("product_characteristic")
 }
 
 model Image {
