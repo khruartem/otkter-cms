@@ -401,7 +401,7 @@ project.icon    0..1 ↔ 0..1 image
 | poster_id | UUID | Да | UNIQUE, FK → image.id | Постер |
 | preview_id | UUID | Да | UNIQUE, FK → image.id | Превью |
 | icon_id | UUID | Да | UNIQUE, FK → image.id | Иконка |
-| category_icon_id | UUID | Да | FK → image.id | Иконка категории |
+| category_icon_id | UUID | Да | UNIQUE, FK → image.id | Иконка категории |
 | created_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата создания |
 | updated_at | TIMESTAMPTZ | Нет | DEFAULT now() | Дата изменения |
 | publication_status | publication_status | Нет | DEFAULT 'draft' | Состояние публикации |
@@ -411,7 +411,7 @@ service.image   0..1 ↔ 0..1 image
 service.poster  0..1 ↔ 0..1 image
 service.preview 0..1 ↔ 0..1 image
 service.icon    0..1 ↔ 0..1 image
-service.category_icon 0..1 → 1 image
+service.category_icon 0..1 ↔ 0..1 image
 ```
 
 #### Ограничения
@@ -421,6 +421,7 @@ service.category_icon 0..1 → 1 image
 - `poster_id` должен быть уникальным.
 - `preview_id` должен быть уникальным.
 - `icon_id` должен быть уникальным.
+- `category_icon_id` должен быть уникальным.
 - `publication_status` может принимать только значения `draft` или `published`.
 
 #### Индексы
@@ -429,7 +430,8 @@ service.category_icon 0..1 → 1 image
 - уникальный индекс по `image_id`;
 - уникальный индекс по `poster_id`;
 - уникальный индекс по `preview_id`;
-- уникальный индекс по `icon_id`.
+- уникальный индекс по `icon_id`;
+- уникальный индекс по `category_icon_id`.
 
 ---
 
