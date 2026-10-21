@@ -5,4 +5,10 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
+  getHealth(): { status: string; service: string } {
+    return {
+      status: 'ok',
+      service: 'otkter-cms-api',
+    };
+  }
 }
