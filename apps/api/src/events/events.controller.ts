@@ -7,8 +7,10 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
+
 import { EventsService } from './events.service.js';
 import type { Event } from './events.service.js';
+
 import { CreateEventDto } from './dto/create-event.dto.js';
 
 @Controller('events')
