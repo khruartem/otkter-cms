@@ -1,12 +1,18 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
   ParseUUIDPipe,
+  Post,
 } from '@nestjs/common';
+
+import { type Project } from '../generated/prisma/client.js';
+
 import { ProjectsService } from './projects.service.js';
-import type { Project } from '../generated/prisma/client.js';
+
+import { CreateProjectDto } from './dto/create-project.dto.js';
 
 @Controller('projects')
 export class ProjectsController {
@@ -26,5 +32,10 @@ export class ProjectsController {
     }
 
     return project;
+  }
+
+  @Post()
+  createProject(@Body() dto: CreateProjectDto): Promise<Project> {
+    return this.projectsService.createProject(dto);
   }
 }
