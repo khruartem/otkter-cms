@@ -6,6 +6,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { getConstraintIndex } from '../prisma/utils/get-constraint-index.js';
 
 import { CreateProjectDto } from './dto/create-project.dto.js';
+import { UpdateProjectDto } from './dto/update-project.dto.js';
 
 @Injectable()
 export class ProjectsService {
@@ -47,5 +48,12 @@ export class ProjectsService {
       }
       throw error;
     }
+  }
+
+  updateProject(id: string, dto: UpdateProjectDto): Promise<Project> {
+    return this.prismaService.project.update({
+      where: { id },
+      data: { ...dto },
+    });
   }
 }
