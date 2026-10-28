@@ -33,7 +33,7 @@ model Project {
   title               String            @db.Text
   shortDescription    String?           @map("short_description") @db.Text
   description         String?           @db.Text
-  sortOrder           Int?              @map("sort_order")
+  sortOrder           Int?              @unique @map("sort_order")
   imageId             String?           @unique @map("image_id") @db.Uuid
   posterId            String?           @unique @map("poster_id") @db.Uuid
   previewId           String?           @unique @map("preview_id") @db.Uuid
