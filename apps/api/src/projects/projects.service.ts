@@ -20,8 +20,16 @@ export class ProjectsService {
     return this.prismaService.project.findMany();
   }
 
-  async getProject(id: string): Promise<Project | null> {
-    return this.prismaService.project.findUnique({ where: { id } });
+  async getProject(id: string): Promise<Project> {
+    const project = await this.prismaService.project.findUnique({
+      where: { id },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Проект не найден!');
+    }
+
+    return project;
   }
 
   async createProject(dto: CreateProjectDto): Promise<Project> {
