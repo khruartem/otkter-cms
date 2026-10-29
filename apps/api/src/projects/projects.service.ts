@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { Prisma, type Project } from '../generated/prisma/client.js';
 
@@ -50,10 +54,20 @@ export class ProjectsService {
     }
   }
 
-  updateProject(id: string, dto: UpdateProjectDto): Promise<Project> {
-    return this.prismaService.project.update({
-      where: { id },
-      data: { ...dto },
-    });
+  async updateProject(id: string, dto: UpdateProjectDto): Promise<Project> {
+    try {
+      return await this.prismaService.project.update({
+        where: { id },
+        data: { ...dto },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException('Проект не найден!');
+      }
+      throw error;
+    }
   }
 }
