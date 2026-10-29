@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  NotFoundException,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -26,14 +25,8 @@ export class ProjectsController {
   }
 
   @Get(':id')
-  async getProject(@Param('id', ParseUUIDPipe) id: string): Promise<Project> {
-    const project = await this.projectsService.getProject(id);
-
-    if (!project) {
-      throw new NotFoundException('Проект не найден!');
-    }
-
-    return project;
+  getProject(@Param('id', ParseUUIDPipe) id: string): Promise<Project> {
+    return this.projectsService.getProject(id);
   }
 
   @Post()
