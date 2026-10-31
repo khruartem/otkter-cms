@@ -25,3 +25,8 @@ dist-ssr
 
 # Generated Prisma Client
 /apps/api/src/generated/prisma/
+
+# Environment variables
+.env
+.env.*
+!.env.example
