@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3Client, S3ClientConfig } from '@aws-sdk/client-s3';
+import {
+  HeadBucketCommand,
+  S3Client,
+  S3ClientConfig,
+} from '@aws-sdk/client-s3';
 
 @Injectable()
-export class StorageService {
+export class StorageService implements OnModuleInit {
   private readonly endpoint: string;
   private readonly region: string;
   private readonly bucket: string;
   private readonly accessKeyId: string;
   private readonly secretAccessKey: string;
   private readonly s3Client: S3Client;
+  private readonly logger = new Logger(StorageService.name);
 
   constructor(private readonly configService: ConfigService) {
     this.endpoint = this.configService.getOrThrow<string>('S3_ENDPOINT');
@@ -31,5 +36,24 @@ export class StorageService {
     };
 
     this.s3Client = new S3Client(s3ClientConfig);
+  }
+
+  async onModuleInit(): Promise<void> {
+    this.logger.log('Connecting to Yandex Cloud S3 bucket...');
+
+    const command = new HeadBucketCommand({
+      Bucket: this.bucket,
+    });
+
+    try {
+      await this.s3Client.send(command);
+
+      this.logger.log('Yandex Cloud S3 bucket is accessible');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+
+      this.logger.error(`Yandex Cloud S3 bucket connection failed: ${message}`);
+      throw error;
+    }
   }
 }
