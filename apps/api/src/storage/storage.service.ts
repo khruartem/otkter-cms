@@ -1,7 +1,9 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
+  DeleteObjectCommand,
   HeadBucketCommand,
+  PutObjectCommand,
   S3Client,
   S3ClientConfig,
 } from '@aws-sdk/client-s3';
@@ -55,5 +57,29 @@ export class StorageService implements OnModuleInit {
       this.logger.error(`Yandex Cloud S3 bucket connection failed: ${message}`);
       throw error;
     }
+  }
+
+  async upload(key: string, body: Buffer, contentType: string): Promise<void> {
+    const input = {
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+      Bucket: this.bucket,
+    };
+
+    const command = new PutObjectCommand(input);
+
+    await this.s3Client.send(command);
+  }
+
+  async delete(key: string): Promise<void> {
+    const input = {
+      Key: key,
+      Bucket: this.bucket,
+    };
+
+    const command = new DeleteObjectCommand(input);
+
+    await this.s3Client.send(command);
   }
 }
