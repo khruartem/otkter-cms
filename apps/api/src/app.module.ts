@@ -8,6 +8,7 @@ import { EventsModule } from './events/events.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { ProjectsModule } from './projects/projects.module.js';
 import { StorageModule } from './storage/storage.module.js';
+import { ImagesModule } from './images/images.module.js';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { StorageModule } from './storage/storage.module.js';
       envFilePath: '../../.env',
     }),
     StorageModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
