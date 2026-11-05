@@ -1,20 +1,20 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import sharp from 'sharp';
+
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+
 import { StorageService } from '../storage/storage.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
-import sharp from 'sharp';
-import { IMAGE_CONFIG } from './config/image.config.js';
+import { File, ProcessedImage } from './types.js';
 
-interface ProcessedImage {
-  buffer: Buffer;
-  width: number;
-  height: number;
-  size: number;
-  mimeType: 'image/webp';
-}
+import { IMAGE_CONFIG } from './config/image.config.js';
+import { Image } from '../generated/prisma/client.js';
 
 @Injectable()
 export class ImagesService {
+  private readonly logger = new Logger(ImagesService.name);
+
   constructor(
     private readonly storageService: StorageService,
     private readonly prismaService: PrismaService,
@@ -44,5 +44,37 @@ export class ImagesService {
       size: info.size,
       mimeType: 'image/webp',
     };
+  }
+
+  private generateStorageKey(): string {
+    return `${IMAGE_CONFIG.storageKeyPrefix}/${randomUUID()}.webp`;
+  }
+
+  async upload(file: File): Promise<Image> {
+    const processedImage = await this.processImage(file.buffer);
+    const { buffer, ...metadata } = processedImage;
+
+    const storageKey = this.generateStorageKey();
+
+    await this.storageService.upload(storageKey, buffer, metadata.mimeType);
+
+    try {
+      const image = await this.prismaService.image.create({
+        data: {
+          storageKey,
+          ...metadata,
+        },
+      });
+
+      return image;
+    } catch (error) {
+      try {
+        await this.storageService.delete(storageKey);
+      } catch (cleanupError) {
+        this.logger.error(cleanupError);
+      }
+
+      throw error;
+    }
   }
 }

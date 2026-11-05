@@ -8,21 +8,28 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+
+import { ImagesService } from './images.service.js';
+
 import { IMAGE_CONFIG } from './config/image.config.js';
 
-type File = Express.Multer.File;
+import type { File } from './types.js';
+import { ImageResponseDto } from './dto/image-response.dto.js';
+import { toImageResponseDto } from './utils/to-image-response-dto.js';
 
 @Controller('images')
 export class ImagesController {
+  constructor(private readonly imagesService: ImagesService) {}
+
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  upload(
+  async upload(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
             maxSize: IMAGE_CONFIG.maxFileSize,
-            message: `Файл слишком большой! Максимальный размер — ${IMAGE_CONFIG.maxFileSize / (2 * 1024)} МБ.`,
+            message: `Файл слишком большой! Максимальный размер — ${IMAGE_CONFIG.maxFileSize / IMAGE_CONFIG.maxFileSize / (1024 * 1024)} МБ.`,
           }),
           new FileTypeValidator({
             fileType: IMAGE_CONFIG.allowedMimeTypes,
@@ -34,9 +41,7 @@ export class ImagesController {
       }),
     )
     file: File,
-  ): Pick<File, 'originalname' | 'size' | 'mimetype'> {
-    const { originalname, size, mimetype } = file;
-
-    return { originalname, size, mimetype };
+  ): Promise<ImageResponseDto> {
+    return toImageResponseDto(await this.imagesService.upload(file));
   }
 }
