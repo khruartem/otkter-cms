@@ -1,15 +1,19 @@
 import sharp from 'sharp';
 
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
 import { StorageService } from '../storage/storage.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
-import { File, ProcessedImage } from './types.js';
+import { File, ProcessedImage, ImageWithUrl } from './types.js';
 
 import { IMAGE_CONFIG } from './config/image.config.js';
-import { Image } from '../generated/prisma/client.js';
 
 @Injectable()
 export class ImagesService {
@@ -50,7 +54,7 @@ export class ImagesService {
     return `${IMAGE_CONFIG.storageKeyPrefix}/${randomUUID()}.webp`;
   }
 
-  async upload(file: File): Promise<Image> {
+  async upload(file: File): Promise<ImageWithUrl> {
     const processedImage = await this.processImage(file.buffer);
     const { buffer, ...metadata } = processedImage;
 
@@ -66,7 +70,10 @@ export class ImagesService {
         },
       });
 
-      return image;
+      return {
+        url: this.storageService.getPublicUrl(storageKey),
+        ...image,
+      };
     } catch (error) {
       try {
         await this.storageService.delete(storageKey);
@@ -76,5 +83,20 @@ export class ImagesService {
 
       throw error;
     }
+  }
+
+  async getImage(id: string): Promise<ImageWithUrl> {
+    const image = await this.prismaService.image.findUnique({
+      where: { id },
+    });
+
+    if (!image) {
+      throw new NotFoundException('Изображение не найдено!');
+    }
+
+    return {
+      url: this.storageService.getPublicUrl(image.storageKey),
+      ...image,
+    };
   }
 }

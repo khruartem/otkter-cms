@@ -5,4 +5,5 @@ export class ImageResponseDto {
   width: number | null;
   height: number | null;
   size: number;
+  url: string;
 }

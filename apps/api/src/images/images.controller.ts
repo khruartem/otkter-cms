@@ -1,8 +1,12 @@
 import {
+  BadRequestException,
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
+  ParseUUIDPipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -29,7 +33,7 @@ export class ImagesController {
         validators: [
           new MaxFileSizeValidator({
             maxSize: IMAGE_CONFIG.maxFileSize,
-            message: `Файл слишком большой! Максимальный размер — ${IMAGE_CONFIG.maxFileSize / IMAGE_CONFIG.maxFileSize / (1024 * 1024)} МБ.`,
+            message: `Файл слишком большой! Максимальный размер — ${IMAGE_CONFIG.maxFileSize / (1024 * 1024)} МБ.`,
           }),
           new FileTypeValidator({
             fileType: IMAGE_CONFIG.allowedMimeTypes,
@@ -38,10 +42,28 @@ export class ImagesController {
           }),
         ],
         fileIsRequired: true,
+        exceptionFactory(error) {
+          if (error === 'File is required') {
+            return new BadRequestException(
+              'Необходимо прикрепить изображение.',
+            );
+          }
+
+          return new BadRequestException(error);
+        },
       }),
     )
     file: File,
   ): Promise<ImageResponseDto> {
     return toImageResponseDto(await this.imagesService.upload(file));
+  }
+
+  @Get(':id')
+  async getImage(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ImageResponseDto> {
+    const image = await this.imagesService.getImage(id);
+
+    return toImageResponseDto(image);
   }
 }
