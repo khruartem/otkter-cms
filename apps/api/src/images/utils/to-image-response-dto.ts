@@ -1,7 +1,7 @@
-import { Image } from '../../generated/prisma/client.js';
 import { ImageResponseDto } from '../dto/image-response.dto.js';
+import { ImageWithUrl } from '../types.js';
 
-export function toImageResponseDto(image: Image): ImageResponseDto {
+export function toImageResponseDto(image: ImageWithUrl): ImageResponseDto {
   return {
     id: image.id,
     storageKey: image.storageKey,
@@ -9,5 +9,6 @@ export function toImageResponseDto(image: Image): ImageResponseDto {
     width: image.width,
     height: image.height,
     size: Number(image.size),
+    url: image.url,
   };
 }

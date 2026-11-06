@@ -2,8 +2,11 @@ import {
   BadRequestException,
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
+  ParseUUIDPipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -53,5 +56,14 @@ export class ImagesController {
     file: File,
   ): Promise<ImageResponseDto> {
     return toImageResponseDto(await this.imagesService.upload(file));
+  }
+
+  @Get(':id')
+  async getImage(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ImageResponseDto> {
+    const image = await this.imagesService.getImage(id);
+
+    return toImageResponseDto(image);
   }
 }

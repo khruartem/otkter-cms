@@ -82,4 +82,8 @@ export class StorageService implements OnModuleInit {
 
     await this.s3Client.send(command);
   }
+
+  getPublicUrl(storageKey: string): string {
+    return `${this.endpoint}/${this.bucket}/${storageKey}/`;
+  }
 }
