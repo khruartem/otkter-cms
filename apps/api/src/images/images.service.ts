@@ -2,6 +2,7 @@ import sharp from 'sharp';
 
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   Logger,
   NotFoundException,
@@ -14,6 +15,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { File, ProcessedImage, ImageWithUrl } from './types.js';
 
 import { IMAGE_CONFIG } from './config/image.config.js';
+import { Image, Prisma } from '../generated/prisma/client.js';
 
 @Injectable()
 export class ImagesService {
@@ -85,7 +87,7 @@ export class ImagesService {
     }
   }
 
-  async getImage(id: string): Promise<ImageWithUrl> {
+  private async findOrThrow(id: string): Promise<Image> {
     const image = await this.prismaService.image.findUnique({
       where: { id },
     });
@@ -94,9 +96,42 @@ export class ImagesService {
       throw new NotFoundException('Изображение не найдено!');
     }
 
+    return image;
+  }
+  async find(id: string): Promise<ImageWithUrl> {
+    const image = await this.findOrThrow(id);
+
     return {
-      url: this.storageService.getPublicUrl(image.storageKey),
       ...image,
+      url: this.storageService.getPublicUrl(image.storageKey),
     };
+  }
+
+  async remove(id: string): Promise<void> {
+    const { storageKey } = await this.findOrThrow(id);
+
+    try {
+      await this.prismaService.image.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+
+      if (error.code === 'P2003') {
+        throw new ConflictException(
+          'Невозможно удалить изображение: оно используется в других материалах.',
+        );
+      }
+
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Изображение не найдено!');
+      }
+
+      throw error;
+    }
+
+    await this.storageService.delete(storageKey);
   }
 }
