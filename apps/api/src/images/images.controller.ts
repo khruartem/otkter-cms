@@ -1,8 +1,11 @@
 import {
   BadRequestException,
   Controller,
+  Delete,
   FileTypeValidator,
   Get,
+  HttpCode,
+  HttpStatus,
   MaxFileSizeValidator,
   Param,
   ParseFilePipe,
@@ -62,8 +65,14 @@ export class ImagesController {
   async getImage(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ImageResponseDto> {
-    const image = await this.imagesService.getImage(id);
+    const image = await this.imagesService.find(id);
 
     return toImageResponseDto(image);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteImage(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.imagesService.remove(id);
   }
 }
