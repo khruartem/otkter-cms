@@ -1,4 +1,4 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 
 import { Prisma } from '../../generated/prisma/client.js';
 
@@ -27,6 +27,10 @@ export function handleProjectError(error: unknown): never {
 
   if (error.code === 'P2025') {
     throw new NotFoundException('Проект не найден!');
+  }
+
+  if (error.code === 'P2003') {
+    throw new BadRequestException('Указана несуществующая связанная сущность.');
   }
 
   throw error;
