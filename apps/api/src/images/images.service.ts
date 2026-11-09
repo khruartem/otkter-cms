@@ -9,13 +9,14 @@ import {
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
+import { Image, Prisma } from '../generated/prisma/client.js';
+
 import { StorageService } from '../storage/storage.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
-import { File, ProcessedImage, ImageWithUrl } from './types.js';
+import { File, ProcessedImage } from './types.js';
 
 import { IMAGE_CONFIG } from './config/image.config.js';
-import { Image, Prisma } from '../generated/prisma/client.js';
 
 @Injectable()
 export class ImagesService {
@@ -56,7 +57,7 @@ export class ImagesService {
     return `${IMAGE_CONFIG.storageKeyPrefix}/${randomUUID()}.webp`;
   }
 
-  async upload(file: File): Promise<ImageWithUrl> {
+  async upload(file: File): Promise<Image> {
     const processedImage = await this.processImage(file.buffer);
     const { buffer, ...metadata } = processedImage;
 
@@ -72,10 +73,7 @@ export class ImagesService {
         },
       });
 
-      return {
-        url: this.storageService.getPublicUrl(storageKey),
-        ...image,
-      };
+      return image;
     } catch (error) {
       try {
         await this.storageService.delete(storageKey);
@@ -98,13 +96,8 @@ export class ImagesService {
 
     return image;
   }
-  async find(id: string): Promise<ImageWithUrl> {
-    const image = await this.findOrThrow(id);
-
-    return {
-      ...image,
-      url: this.storageService.getPublicUrl(image.storageKey),
-    };
+  async find(id: string): Promise<Image> {
+    return this.findOrThrow(id);
   }
 
   async remove(id: string): Promise<void> {
