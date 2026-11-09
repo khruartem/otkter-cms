@@ -17,16 +17,19 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ImagesService } from './images.service.js';
+import { ImageResponseMapper } from './mappers/image-response.mapper.js';
 
 import { IMAGE_CONFIG } from './config/image.config.js';
-
 import type { File } from './types.js';
+
 import { ImageResponseDto } from './dto/image-response.dto.js';
-import { toImageResponseDto } from './utils/to-image-response-dto.js';
 
 @Controller('images')
 export class ImagesController {
-  constructor(private readonly imagesService: ImagesService) {}
+  constructor(
+    private readonly imagesService: ImagesService,
+    private readonly imageResponseMapper: ImageResponseMapper,
+  ) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -58,7 +61,9 @@ export class ImagesController {
     )
     file: File,
   ): Promise<ImageResponseDto> {
-    return toImageResponseDto(await this.imagesService.upload(file));
+    const image = await this.imagesService.upload(file);
+
+    return this.imageResponseMapper.toDto(image);
   }
 
   @Get(':id')
@@ -67,7 +72,7 @@ export class ImagesController {
   ): Promise<ImageResponseDto> {
     const image = await this.imagesService.find(id);
 
-    return toImageResponseDto(image);
+    return this.imageResponseMapper.toDto(image);
   }
 
   @Delete(':id')

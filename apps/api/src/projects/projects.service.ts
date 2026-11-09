@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateProjectDto } from './dto/create-project.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
 import { handleProjectError } from './utils/handle-project-error.js';
+import { ProjectWithImages } from './types.js';
 
 @Injectable()
 export class ProjectsService {
@@ -16,9 +17,15 @@ export class ProjectsService {
     return this.prismaService.project.findMany();
   }
 
-  async getProject(id: string): Promise<Project> {
+  async getProject(id: string): Promise<ProjectWithImages> {
     const project = await this.prismaService.project.findUnique({
       where: { id },
+      include: {
+        image: true,
+        poster: true,
+        preview: true,
+        icon: true,
+      },
     });
 
     if (!project) {
