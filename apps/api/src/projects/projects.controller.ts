@@ -8,8 +8,6 @@ import {
   Post,
 } from '@nestjs/common';
 
-import { type Project } from '../generated/prisma/client.js';
-
 import { ProjectsService } from './projects.service.js';
 import { ProjectResponseMapper } from './mappers/project-response.mapper.js';
 
@@ -25,8 +23,10 @@ export class ProjectsController {
   ) {}
 
   @Get()
-  getProjects(): Promise<Project[]> {
-    return this.projectsService.getProjects();
+  async getProjects(): Promise<ProjectResponseDto[]> {
+    const projects = await this.projectsService.getProjects();
+
+    return projects.map((project) => this.projectResponseMapper.toDto(project));
   }
 
   @Get(':id')
@@ -39,15 +39,21 @@ export class ProjectsController {
   }
 
   @Post()
-  createProject(@Body() dto: CreateProjectDto): Promise<Project> {
-    return this.projectsService.createProject(dto);
+  async createProject(
+    @Body() dto: CreateProjectDto,
+  ): Promise<ProjectResponseDto> {
+    const project = await this.projectsService.createProject(dto);
+
+    return this.projectResponseMapper.toDto(project);
   }
 
   @Patch(':id')
-  updateProject(
+  async updateProject(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateProjectDto,
-  ): Promise<Project> {
-    return this.projectsService.updateProject(id, dto);
+  ): Promise<ProjectResponseDto> {
+    const project = await this.projectsService.updateProject(id, dto);
+
+    return this.projectResponseMapper.toDto(project);
   }
 }
