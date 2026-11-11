@@ -12,13 +12,13 @@ import { projectImagesInclude } from './config/project-images-include.js';
 export class ProjectsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getProjects(): Promise<ProjectWithImages[]> {
+  async findAll(): Promise<ProjectWithImages[]> {
     return this.prismaService.project.findMany({
       include: projectImagesInclude,
     });
   }
 
-  async getProject(id: string): Promise<ProjectWithImages> {
+  async findOne(id: string): Promise<ProjectWithImages> {
     const project = await this.prismaService.project.findUnique({
       where: { id },
       include: projectImagesInclude,
@@ -31,7 +31,7 @@ export class ProjectsService {
     return project;
   }
 
-  async createProject(dto: CreateProjectDto): Promise<ProjectWithImages> {
+  async create(dto: CreateProjectDto): Promise<ProjectWithImages> {
     try {
       return await this.prismaService.project.create({
         data: {
@@ -44,15 +44,22 @@ export class ProjectsService {
     }
   }
 
-  async updateProject(
-    id: string,
-    dto: UpdateProjectDto,
-  ): Promise<ProjectWithImages> {
+  async update(id: string, dto: UpdateProjectDto): Promise<ProjectWithImages> {
     try {
       return await this.prismaService.project.update({
         where: { id },
         data: { ...dto },
         include: projectImagesInclude,
+      });
+    } catch (error) {
+      handleProjectError(error);
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    try {
+      await this.prismaService.project.delete({
+        where: { id },
       });
     } catch (error) {
       handleProjectError(error);

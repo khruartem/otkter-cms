@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { ProjectsModule } from './projects/projects.module.js';
 import { StorageModule } from './storage/storage.module.js';
 import { ImagesModule } from './images/images.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ImagesModule } from './images/images.module.js';
     }),
     StorageModule,
     ImagesModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -96,6 +96,7 @@ export class ImagesService {
 
     return image;
   }
+  
   async find(id: string): Promise<Image> {
     return this.findOrThrow(id);
   }
