@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -24,7 +27,7 @@ export class ProjectsController {
 
   @Get()
   async getProjects(): Promise<ProjectResponseDto[]> {
-    const projects = await this.projectsService.getProjects();
+    const projects = await this.projectsService.findAll();
 
     return projects.map((project) => this.projectResponseMapper.toDto(project));
   }
@@ -33,7 +36,7 @@ export class ProjectsController {
   async getProject(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<ProjectResponseDto> {
-    const project = await this.projectsService.getProject(id);
+    const project = await this.projectsService.findOne(id);
 
     return this.projectResponseMapper.toDto(project);
   }
@@ -42,7 +45,7 @@ export class ProjectsController {
   async createProject(
     @Body() dto: CreateProjectDto,
   ): Promise<ProjectResponseDto> {
-    const project = await this.projectsService.createProject(dto);
+    const project = await this.projectsService.create(dto);
 
     return this.projectResponseMapper.toDto(project);
   }
@@ -52,8 +55,14 @@ export class ProjectsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateProjectDto,
   ): Promise<ProjectResponseDto> {
-    const project = await this.projectsService.updateProject(id, dto);
+    const project = await this.projectsService.update(id, dto);
 
     return this.projectResponseMapper.toDto(project);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteProject(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.projectsService.remove(id);
   }
 }
