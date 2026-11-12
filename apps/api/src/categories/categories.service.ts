@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { categoryImagesInclude } from './config/category-images-include.js';
@@ -30,5 +34,24 @@ export class CategoriesService {
 
       throw error;
     }
+  }
+
+  async findAll(): Promise<CategoryWithImage[]> {
+    return this.prismaService.category.findMany({
+      include: categoryImagesInclude,
+    });
+  }
+
+  async findOne(id: string): Promise<CategoryWithImage> {
+    const category = await this.prismaService.category.findUnique({
+      where: { id },
+      include: categoryImagesInclude,
+    });
+
+    if (!category) {
+      throw new NotFoundException('Категория не найдена!');
+    }
+
+    return category;
   }
 }
