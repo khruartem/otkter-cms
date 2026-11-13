@@ -4,12 +4,14 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { CategoryResponseMapper } from './mappers/category-response.mapper.js';
 import { CategoryResponseDto } from './dto/category-response.dto.js';
+import { UpdateCategoryDto } from './dto/update-category.dto.js';
 
 @Controller('categories')
 export class CategoriesController {
@@ -41,6 +43,16 @@ export class CategoriesController {
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<CategoryResponseDto> {
     const category = await this.categoriesService.findOne(id);
+
+    return this.categoryResponseMapper.toDto(category);
+  }
+
+  @Patch(':id')
+  async updateCategory(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateCategoryDto,
+  ): Promise<CategoryResponseDto> {
+    const category = await this.categoriesService.update(id, dto);
 
     return this.categoryResponseMapper.toDto(category);
   }

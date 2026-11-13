@@ -8,6 +8,8 @@ import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { categoryImagesInclude } from './config/category-images-include.js';
 import { CategoryWithImage } from './types.js';
 import { Prisma } from '../generated/prisma/client.js';
+import { UpdateCategoryDto } from './dto/update-category.dto.js';
+import { handleCategoryError } from './utils/handle-category-error.js';
 
 @Injectable()
 export class CategoriesService {
@@ -22,17 +24,7 @@ export class CategoriesService {
         include: categoryImagesInclude,
       });
     } catch (error) {
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
-        throw error;
-      }
-
-      if (error.code === 'P2003') {
-        throw new BadRequestException(
-          'Указана несуществующая связанная сущность.',
-        );
-      }
-
-      throw error;
+      handleCategoryError(error);
     }
   }
 
@@ -53,5 +45,17 @@ export class CategoriesService {
     }
 
     return category;
+  }
+
+  async update(id: string, dto: UpdateCategoryDto): Promise<CategoryWithImage> {
+    try {
+      return await this.prismaService.category.update({
+        where: { id },
+        data: { ...dto },
+        include: categoryImagesInclude,
+      });
+    } catch (error) {
+      handleCategoryError(error);
+    }
   }
 }
