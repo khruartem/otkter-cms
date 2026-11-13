@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -55,5 +58,11 @@ export class CategoriesController {
     const category = await this.categoriesService.update(id, dto);
 
     return this.categoryResponseMapper.toDto(category);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteCategory(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.categoriesService.remove(id);
   }
 }
