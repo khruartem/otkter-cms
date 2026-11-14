@@ -8,7 +8,8 @@ import { UpdateCategoryDto } from './dto/update-category.dto.js';
 import { CategoryWithImage } from './types.js';
 
 import { categoryImagesInclude } from './config/category-images-include.js';
-import { handleCategoryError } from './utils/handle-category-error.js';
+import { handlePrismaError } from '../prisma/utils/handle-prisma-error.js';
+import { categoryErrorMessages } from './config/category-error-messages.js';
 
 @Injectable()
 export class CategoriesService {
@@ -23,7 +24,7 @@ export class CategoriesService {
         include: categoryImagesInclude,
       });
     } catch (error) {
-      handleCategoryError(error);
+      handlePrismaError(error, categoryErrorMessages);
     }
   }
 
@@ -54,7 +55,7 @@ export class CategoriesService {
         include: categoryImagesInclude,
       });
     } catch (error) {
-      handleCategoryError(error);
+      handlePrismaError(error, categoryErrorMessages);
     }
   }
 
@@ -64,7 +65,7 @@ export class CategoriesService {
         where: { id },
       });
     } catch (error) {
-      handleCategoryError(error);
+      handlePrismaError(error, categoryErrorMessages);
     }
   }
 }
