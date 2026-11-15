@@ -1,8 +1,11 @@
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 
 import { Prisma } from '../../generated/prisma/client.js';
 
 import { getConstraintIndex } from '../../prisma/utils/get-constraint-index.js';
+import { handlePrismaError } from '../../prisma/utils/handle-prisma-error.js';
+
+import { projectErrorMessages } from '../config/project-error-messages.js';
 
 export function handleProjectError(error: unknown): never {
   if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
@@ -22,16 +25,8 @@ export function handleProjectError(error: unknown): never {
       );
     }
 
-    throw new ConflictException('Нарушена уникальность данных проекта');
+    throw new ConflictException('Нарушена уникальность данных проекта.');
   }
 
-  if (error.code === 'P2025') {
-    throw new NotFoundException('Проект не найден!');
-  }
-
-  if (error.code === 'P2003') {
-    throw new BadRequestException('Указана несуществующая связанная сущность.');
-  }
-
-  throw error;
+  handlePrismaError(error, projectErrorMessages);
 }
