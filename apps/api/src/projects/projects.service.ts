@@ -4,9 +4,16 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 import { CreateProjectDto } from './dto/create-project.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
+import { AddProjectCategoryDto } from './dto/add-project-category.dto.js';
+
+import type { ProjectWithImages } from './types.js';
+import type { ProjectCategory } from '../generated/prisma/client.js';
+
+import { handlePrismaError } from '../prisma/utils/handle-prisma-error.js';
 import { handleProjectError } from './utils/handle-project-error.js';
-import { ProjectWithImages } from './types.js';
+
 import { projectImagesInclude } from './config/project-images-include.js';
+import { projectCategoryErrorMessages } from './config/project-category-error-messages.js';
 
 @Injectable()
 export class ProjectsService {
@@ -63,6 +70,22 @@ export class ProjectsService {
       });
     } catch (error) {
       handleProjectError(error);
+    }
+  }
+
+  async assignCategory(
+    projectId: string,
+    dto: AddProjectCategoryDto,
+  ): Promise<ProjectCategory> {
+    try {
+      return await this.prismaService.projectCategory.create({
+        data: {
+          projectId,
+          ...dto,
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, projectCategoryErrorMessages);
     }
   }
 }
