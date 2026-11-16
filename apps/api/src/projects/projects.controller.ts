@@ -17,6 +17,9 @@ import { ProjectResponseMapper } from './mappers/project-response.mapper.js';
 import { CreateProjectDto } from './dto/create-project.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
 import { ProjectResponseDto } from './dto/project-response.dto.js';
+import { AddProjectCategoryDto } from './dto/add-project-category.dto.js';
+
+import type { ProjectCategory } from '../generated/prisma/client.js';
 
 @Controller('projects')
 export class ProjectsController {
@@ -64,5 +67,13 @@ export class ProjectsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteProject(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.projectsService.remove(id);
+  }
+
+  @Post(':id/categories')
+  async addProjectCategory(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AddProjectCategoryDto,
+  ): Promise<ProjectCategory> {
+    return this.projectsService.assignCategory(id, dto);
   }
 }
