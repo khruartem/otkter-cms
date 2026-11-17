@@ -88,4 +88,19 @@ export class ProjectsService {
       handlePrismaError(error, projectCategoryErrorMessages);
     }
   }
+
+  async unassignCategory(projectId: string, categoryId: string): Promise<void> {
+    try {
+      await this.prismaService.projectCategory.delete({
+        where: {
+          projectId_categoryId: {
+            projectId,
+            categoryId,
+          },
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, projectCategoryErrorMessages);
+    }
+  }
 }
