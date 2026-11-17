@@ -76,4 +76,13 @@ export class ProjectsController {
   ): Promise<ProjectCategory> {
     return this.projectsService.assignCategory(id, dto);
   }
+
+  @Delete(':id/categories/:categoryId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteProjectCategory(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('categoryId', ParseUUIDPipe) categoryId: string,
+  ): Promise<void> {
+    await this.projectsService.unassignCategory(id, categoryId);
+  }
 }
