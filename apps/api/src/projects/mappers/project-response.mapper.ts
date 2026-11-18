@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
+
 import { ProjectResponseDto } from '../dto/project-response.dto.js';
-import { ProjectWithImages } from '../types.js';
+
+import { CategoryResponseMapper } from '../../categories/mappers/category-response.mapper.js';
+import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
+
+import type { ProjectDetails } from '../types.js';
 
 @Injectable()
 export class ProjectResponseMapper {
-  constructor(private readonly imageResponseMapper: ImageResponseMapper) {}
+  constructor(
+    private readonly imageResponseMapper: ImageResponseMapper,
+    private readonly categoryResponseMapper: CategoryResponseMapper,
+  ) {}
 
-  toDto(project: ProjectWithImages): ProjectResponseDto {
+  toDto(project: ProjectDetails): ProjectResponseDto {
     const {
       id,
       slug,
@@ -21,6 +28,7 @@ export class ProjectResponseMapper {
       icon,
       isMain,
       isActive,
+      categories,
       categoryIsAttention,
       createdAt,
       updatedAt,
@@ -40,6 +48,9 @@ export class ProjectResponseMapper {
       icon: icon ? this.imageResponseMapper.toDto(icon) : null,
       isMain,
       isActive,
+      categories: categories.map(({ category }) =>
+        this.categoryResponseMapper.toDto(category),
+      ),
       categoryIsAttention,
       createdAt,
       updatedAt,

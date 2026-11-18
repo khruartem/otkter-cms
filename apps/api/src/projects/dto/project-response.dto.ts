@@ -1,3 +1,4 @@
+import { CategoryResponseDto } from '../../categories/dto/category-response.dto.js';
 import { PublicationStatus } from '../../generated/prisma/client.js';
 import { ImageResponseDto } from '../../images/dto/image-response.dto.js';
 
@@ -12,6 +13,7 @@ export class ProjectResponseDto {
   poster: ImageResponseDto | null;
   preview: ImageResponseDto | null;
   icon: ImageResponseDto | null;
+  categories: CategoryResponseDto[];
   isMain: boolean;
   isActive: boolean;
   categoryIsAttention: boolean;

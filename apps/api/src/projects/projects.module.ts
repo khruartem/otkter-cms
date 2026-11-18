@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { ImagesModule } from '../images/images.module.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
+import { CategoriesModule } from '../categories/categories.module.js';
 
 import { ProjectsController } from './projects.controller.js';
 
@@ -11,6 +12,6 @@ import { ProjectResponseMapper } from './mappers/project-response.mapper.js';
 @Module({
   controllers: [ProjectsController],
   providers: [ProjectsService, ProjectResponseMapper],
-  imports: [PrismaModule, ImagesModule],
+  imports: [PrismaModule, ImagesModule, CategoriesModule],
 })
 export class ProjectsModule {}
