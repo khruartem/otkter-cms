@@ -12,5 +12,6 @@ import { CategoryResponseMapper } from './mappers/category-response.mapper.js';
   controllers: [CategoriesController],
   providers: [CategoriesService, CategoryResponseMapper],
   imports: [PrismaModule, ImagesModule],
+  exports: [CategoryResponseMapper],
 })
 export class CategoriesModule {}
