@@ -1,41 +1,32 @@
 import { Injectable } from '@nestjs/common';
 
+import { PrismaService } from '../prisma/prisma.service.js';
+
 import { CreateEventDto } from './dto/create-event.dto.js';
 
-export interface Event {
-  id: number;
-  title: string;
-}
+import { eventErrorMessages } from './config/event-error-messages.js';
 
-const EVENTS: Event[] = [
-  {
-    id: 1,
-    title: 'Спектакль «Есенин. Жизнь в стихах»',
-  },
-  {
-    id: 2,
-    title: 'Творческая встреча',
-  },
-];
+import { handlePrismaError } from '../prisma/utils/handle-prisma-error.js';
+
+import type { Event } from '../generated/prisma/client.js';
 
 @Injectable()
 export class EventsService {
-  getEvents(): Event[] {
-    return EVENTS;
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
-  getEvent(id: number): Event | undefined {
-    return EVENTS.find((event) => event.id === id);
-  }
-
-  createEvent(event: CreateEventDto): Event {
-    const nextId =
-      EVENTS.reduce((max, item) => (item.id > max ? item.id : max), 0) + 1;
-
-    const nextEvent = { ...event, id: nextId };
-
-    EVENTS.push(nextEvent);
-
-    return nextEvent;
+  async create(projectId: string, dto: CreateEventDto): Promise<Event> {
+    try {
+      return await this.prismaService.event.create({
+        data: {
+          ...dto,
+          dateTime: new Date(dto.dateTime),
+          project: {
+            connect: { id: projectId },
+          },
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, eventErrorMessages);
+    }
   }
 }
