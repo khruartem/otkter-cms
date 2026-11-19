@@ -331,7 +331,6 @@ model Event {
   place     String   @db.Text
   dateTime  DateTime @map("date_time") @db.Timestamptz
   label     String?  @db.Text
-  isActive  Boolean  @default(true) @map("is_active")
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 

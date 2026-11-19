@@ -1,40 +1,25 @@
-import {
-  Body,
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  ParseIntPipe,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 
 import { EventsService } from './events.service.js';
-import type { Event } from './events.service.js';
 
 import { CreateEventDto } from './dto/create-event.dto.js';
+import { EventResponseDto } from './dto/event-response.dto.js';
+import { EventResponseMapper } from './mappers/event-response.mapper.js';
 
-@Controller('events')
+@Controller('projects/:projectId/events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
-
-  @Get()
-  getEvents(): Event[] {
-    return this.eventsService.getEvents();
-  }
-
-  @Get(':id')
-  getEvent(@Param('id', ParseIntPipe) id: number): Event {
-    const event = this.eventsService.getEvent(id);
-
-    if (!event) {
-      throw new NotFoundException('Мероприятие не найдено!');
-    }
-
-    return event;
-  }
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly eventResponseMapper: EventResponseMapper,
+  ) {}
 
   @Post()
-  createEvent(@Body() body: CreateEventDto): Event {
-    return this.eventsService.createEvent(body);
+  async createEvent(
+    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Body() dto: CreateEventDto,
+  ): Promise<EventResponseDto> {
+    const event = await this.eventsService.create(projectId, dto);
+
+    return this.eventResponseMapper.toDto(event);
   }
 }
