@@ -1,4 +1,13 @@
-import { Body, Controller, Param, ParseUUIDPipe, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+} from '@nestjs/common';
 
 import { EventsService } from './events.service.js';
 import { EventResponseMapper } from './mappers/event-response.mapper.js';
@@ -21,5 +30,11 @@ export class EventsController {
     const event = await this.eventsService.update(id, dto);
 
     return this.eventResponseMapper.toDto(event);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteEvent(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.eventsService.remove(id);
   }
 }
