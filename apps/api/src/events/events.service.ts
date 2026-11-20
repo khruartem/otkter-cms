@@ -29,4 +29,15 @@ export class EventsService {
       handlePrismaError(error, eventErrorMessages);
     }
   }
+
+  async findAll(projectId: string): Promise<Event[]> {
+    return this.prismaService.event.findMany({
+      where: {
+        projectId,
+      },
+      orderBy: {
+        dateTime: 'asc',
+      },
+    });
+  }
 }
