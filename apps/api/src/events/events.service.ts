@@ -3,8 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 import { CreateEventDto } from './dto/create-event.dto.js';
+import { UpdateEventDto } from './dto/update-event.dto.js';
 
-import { eventErrorMessages } from './config/event-error-messages.js';
+import { projectEventErrorMessages } from './config/project-event-error-messages.js';
+import { eventUpdateErrorMessages } from './config/event-update-error-messages copy.js';
 
 import { handlePrismaError } from '../prisma/utils/handle-prisma-error.js';
 
@@ -26,7 +28,7 @@ export class EventsService {
         },
       });
     } catch (error) {
-      handlePrismaError(error, eventErrorMessages);
+      handlePrismaError(error, projectEventErrorMessages);
     }
   }
 
@@ -39,5 +41,19 @@ export class EventsService {
         dateTime: 'asc',
       },
     });
+  }
+
+  async update(id: string, dto: UpdateEventDto): Promise<Event> {
+    try {
+      return await this.prismaService.event.update({
+        where: { id },
+        data: {
+          ...dto,
+          dateTime: dto.dateTime ? new Date(dto.dateTime) : undefined,
+        },
+      });
+    } catch (error) {
+      handlePrismaError(error, eventUpdateErrorMessages);
+    }
   }
 }
