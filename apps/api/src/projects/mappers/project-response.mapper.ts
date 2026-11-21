@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { ProjectResponseDto } from '../dto/project-response.dto.js';
-
 import { CategoryResponseMapper } from '../../categories/mappers/category-response.mapper.js';
 import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
+import { EventResponseMapper } from '../../events/mappers/event-response.mapper.js';
+
+import { ProjectResponseDto } from '../dto/project-response.dto.js';
 
 import type { ProjectDetails } from '../types.js';
 
@@ -12,6 +13,7 @@ export class ProjectResponseMapper {
   constructor(
     private readonly imageResponseMapper: ImageResponseMapper,
     private readonly categoryResponseMapper: CategoryResponseMapper,
+    private readonly eventResponseMapper: EventResponseMapper,
   ) {}
 
   toDto(project: ProjectDetails): ProjectResponseDto {
@@ -29,6 +31,7 @@ export class ProjectResponseMapper {
       isMain,
       isActive,
       categories,
+      events,
       categoryIsAttention,
       createdAt,
       updatedAt,
@@ -51,6 +54,7 @@ export class ProjectResponseMapper {
       categories: categories.map(({ category }) =>
         this.categoryResponseMapper.toDto(category),
       ),
+      events: events.map((event) => this.eventResponseMapper.toDto(event)),
       categoryIsAttention,
       createdAt,
       updatedAt,

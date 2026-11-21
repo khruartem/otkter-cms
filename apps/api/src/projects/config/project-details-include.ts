@@ -14,4 +14,9 @@ export const projectDetailsInclude = {
       },
     },
   },
+  events: {
+    orderBy: {
+      dateTime: 'asc',
+    },
+  },
 } as const satisfies Prisma.ProjectInclude;

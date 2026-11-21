@@ -1,6 +1,8 @@
-import { CategoryResponseDto } from '../../categories/dto/category-response.dto.js';
-import { PublicationStatus } from '../../generated/prisma/client.js';
-import { ImageResponseDto } from '../../images/dto/image-response.dto.js';
+import type { CategoryResponseDto } from '../../categories/dto/category-response.dto.js';
+import type { EventResponseDto } from '../../events/dto/event-response.dto.js';
+import type { ImageResponseDto } from '../../images/dto/image-response.dto.js';
+
+import type { PublicationStatus } from '../../generated/prisma/client.js';
 
 export class ProjectResponseDto {
   id: string;
@@ -14,6 +16,7 @@ export class ProjectResponseDto {
   preview: ImageResponseDto | null;
   icon: ImageResponseDto | null;
   categories: CategoryResponseDto[];
+  events: EventResponseDto[];
   isMain: boolean;
   isActive: boolean;
   categoryIsAttention: boolean;

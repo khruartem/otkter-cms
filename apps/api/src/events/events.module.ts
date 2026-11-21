@@ -12,5 +12,6 @@ import { EventResponseMapper } from './mappers/event-response.mapper.js';
   controllers: [ProjectEventsController, EventsController],
   providers: [EventsService, EventResponseMapper],
   imports: [PrismaModule],
+  exports: [EventResponseMapper],
 })
 export class EventsModule {}
