@@ -10,6 +10,9 @@ import { ProjectsModule } from './projects/projects.module.js';
 import { StorageModule } from './storage/storage.module.js';
 import { ImagesModule } from './images/images.module.js';
 import { CategoriesModule } from './categories/categories.module.js';
+import { PersonsService } from './persons/persons.service.js';
+import { PersonsController } from './persons/persons.controller.js';
+import { PersonsModule } from './persons/persons.module.js';
 
 @Module({
   imports: [
@@ -23,8 +26,9 @@ import { CategoriesModule } from './categories/categories.module.js';
     StorageModule,
     ImagesModule,
     CategoriesModule,
+    PersonsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, PersonsController],
+  providers: [AppService, PersonsService],
 })
 export class AppModule {}
