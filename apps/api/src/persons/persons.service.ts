@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service.js';
 
@@ -25,5 +25,25 @@ export class PersonsService {
     } catch (error) {
       handlePersonError(error);
     }
+  }
+
+  async findAll(): Promise<PersonDetails[]> {
+    return this.prismaService.person.findMany({
+      include: personDetailsInclude,
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
+    });
+  }
+
+  async findOne(id: string): Promise<PersonDetails> {
+    const person = await this.prismaService.person.findUnique({
+      where: { id },
+      include: personDetailsInclude,
+    });
+
+    if (!person) {
+      throw new NotFoundException('Персона не найдена!');
+    }
+
+    return person;
   }
 }
