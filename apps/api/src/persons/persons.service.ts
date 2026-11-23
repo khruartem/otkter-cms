@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service.js';
 
@@ -9,6 +9,7 @@ import { personDetailsInclude } from './config/person-details-include.js';
 import { handlePersonError } from './utils/handle-person-error.js';
 
 import type { PersonDetails } from './types.js';
+import { UpdatePersonDto } from './dto/update-person.dto.js';
 
 @Injectable()
 export class PersonsService {
@@ -21,6 +22,50 @@ export class PersonsService {
           ...dto,
         },
         include: personDetailsInclude,
+      });
+    } catch (error) {
+      handlePersonError(error);
+    }
+  }
+
+  async findAll(): Promise<PersonDetails[]> {
+    return this.prismaService.person.findMany({
+      include: personDetailsInclude,
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }, { id: 'asc' }],
+    });
+  }
+
+  async findOne(id: string): Promise<PersonDetails> {
+    const person = await this.prismaService.person.findUnique({
+      where: { id },
+      include: personDetailsInclude,
+    });
+
+    if (!person) {
+      throw new NotFoundException('Персона не найдена!');
+    }
+
+    return person;
+  }
+
+  async update(id: string, dto: UpdatePersonDto): Promise<PersonDetails> {
+    try {
+      return await this.prismaService.person.update({
+        where: { id },
+        data: {
+          ...dto,
+        },
+        include: personDetailsInclude,
+      });
+    } catch (error) {
+      handlePersonError(error);
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    try {
+      await this.prismaService.person.delete({
+        where: { id },
       });
     } catch (error) {
       handlePersonError(error);
