@@ -1,4 +1,4 @@
-export class EventResponseDto {
+export class ResponseEventDto {
   id: string;
   place: string;
   dateTime: Date;

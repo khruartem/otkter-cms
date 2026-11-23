@@ -1,4 +1,4 @@
-export class ImageResponseDto {
+export class ResponseImageDto {
   id: string;
   storageKey: string;
   mimeType: string | null;

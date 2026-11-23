@@ -4,7 +4,7 @@ import { CategoryResponseMapper } from '../../categories/mappers/category-respon
 import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
 import { EventResponseMapper } from '../../events/mappers/event-response.mapper.js';
 
-import { ProjectResponseDto } from '../dto/project-response.dto.js';
+import { ResponseProjectDto } from '../dto/response-project.dto.js';
 
 import type { ProjectDetails } from '../types.js';
 
@@ -16,7 +16,7 @@ export class ProjectResponseMapper {
     private readonly eventResponseMapper: EventResponseMapper,
   ) {}
 
-  toDto(project: ProjectDetails): ProjectResponseDto {
+  toDto(project: ProjectDetails): ResponseProjectDto {
     const {
       id,
       slug,

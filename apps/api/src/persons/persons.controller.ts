@@ -1,4 +1,20 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { PersonsService } from './persons.service.js';
+import { PersonResponseMapper } from './mapper/person-response.mapper.js';
+import { CreatePersonDto } from './dto/create-person.dto.js';
+import { ResponsePersonDto } from './dto/response-person.dto.js';
 
 @Controller('persons')
-export class PersonsController {}
+export class PersonsController {
+  constructor(
+    private readonly personsService: PersonsService,
+    private readonly personResponseMapper: PersonResponseMapper,
+  ) {}
+
+  @Post()
+  async createPerson(@Body() dto: CreatePersonDto): Promise<ResponsePersonDto> {
+    const person = await this.personsService.create(dto);
+
+    return this.personResponseMapper.toDto(person);
+  }
+}

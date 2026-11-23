@@ -16,7 +16,7 @@ import { ProjectResponseMapper } from './mappers/project-response.mapper.js';
 
 import { CreateProjectDto } from './dto/create-project.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
-import { ProjectResponseDto } from './dto/project-response.dto.js';
+import { ResponseProjectDto } from './dto/response-project.dto.js';
 import { AddProjectCategoryDto } from './dto/add-project-category.dto.js';
 
 import type { ProjectCategory } from '../generated/prisma/client.js';
@@ -29,7 +29,7 @@ export class ProjectsController {
   ) {}
 
   @Get()
-  async getProjects(): Promise<ProjectResponseDto[]> {
+  async getProjects(): Promise<ResponseProjectDto[]> {
     const projects = await this.projectsService.findAll();
 
     return projects.map((project) => this.projectResponseMapper.toDto(project));
@@ -38,7 +38,7 @@ export class ProjectsController {
   @Get(':id')
   async getProject(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<ProjectResponseDto> {
+  ): Promise<ResponseProjectDto> {
     const project = await this.projectsService.findOne(id);
 
     return this.projectResponseMapper.toDto(project);
@@ -47,7 +47,7 @@ export class ProjectsController {
   @Post()
   async createProject(
     @Body() dto: CreateProjectDto,
-  ): Promise<ProjectResponseDto> {
+  ): Promise<ResponseProjectDto> {
     const project = await this.projectsService.create(dto);
 
     return this.projectResponseMapper.toDto(project);
@@ -57,7 +57,7 @@ export class ProjectsController {
   async updateProject(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateProjectDto,
-  ): Promise<ProjectResponseDto> {
+  ): Promise<ResponseProjectDto> {
     const project = await this.projectsService.update(id, dto);
 
     return this.projectResponseMapper.toDto(project);
