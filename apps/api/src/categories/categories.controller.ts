@@ -13,7 +13,7 @@ import {
 import { CategoriesService } from './categories.service.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { CategoryResponseMapper } from './mappers/category-response.mapper.js';
-import { CategoryResponseDto } from './dto/category-response.dto.js';
+import { ResponseCategoryDto } from './dto/response-category.dto.js';
 import { UpdateCategoryDto } from './dto/update-category.dto.js';
 
 @Controller('categories')
@@ -26,14 +26,14 @@ export class CategoriesController {
   @Post()
   async createCategory(
     @Body() dto: CreateCategoryDto,
-  ): Promise<CategoryResponseDto> {
+  ): Promise<ResponseCategoryDto> {
     const category = await this.categoriesService.create(dto);
 
     return this.categoryResponseMapper.toDto(category);
   }
 
   @Get()
-  async getCategories(): Promise<CategoryResponseDto[]> {
+  async getCategories(): Promise<ResponseCategoryDto[]> {
     const categories = await this.categoriesService.findAll();
 
     return categories.map((category) =>
@@ -44,7 +44,7 @@ export class CategoriesController {
   @Get(':id')
   async getCategory(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<CategoryResponseDto> {
+  ): Promise<ResponseCategoryDto> {
     const category = await this.categoriesService.findOne(id);
 
     return this.categoryResponseMapper.toDto(category);
@@ -54,7 +54,7 @@ export class CategoriesController {
   async updateCategory(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateCategoryDto,
-  ): Promise<CategoryResponseDto> {
+  ): Promise<ResponseCategoryDto> {
     const category = await this.categoriesService.update(id, dto);
 
     return this.categoryResponseMapper.toDto(category);

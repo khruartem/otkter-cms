@@ -12,7 +12,7 @@ import {
 import { EventsService } from './events.service.js';
 import { EventResponseMapper } from './mappers/event-response.mapper.js';
 
-import { EventResponseDto } from './dto/event-response.dto.js';
+import { ResponseEventDto } from './dto/response-event.dto.js';
 import { UpdateEventDto } from './dto/update-event.dto.js';
 
 @Controller('events')
@@ -26,7 +26,7 @@ export class EventsController {
   async updateEvent(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateEventDto,
-  ): Promise<EventResponseDto> {
+  ): Promise<ResponseEventDto> {
     const event = await this.eventsService.update(id, dto);
 
     return this.eventResponseMapper.toDto(event);

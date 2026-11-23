@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { PersonsService } from './persons.service.js';
 import { PersonResponseMapper } from './mapper/person-response.mapper.js';
 import { CreatePersonDto } from './dto/create-person.dto.js';
-import { PersonResponseDto } from './dto/person-response.dto.js';
+import { ResponsePersonDto } from './dto/response-person.dto.js';
 
 @Controller('persons')
 export class PersonsController {
@@ -12,7 +12,7 @@ export class PersonsController {
   ) {}
 
   @Post()
-  async createPerson(@Body() dto: CreatePersonDto): Promise<PersonResponseDto> {
+  async createPerson(@Body() dto: CreatePersonDto): Promise<ResponsePersonDto> {
     const person = await this.personsService.create(dto);
 
     return this.personResponseMapper.toDto(person);

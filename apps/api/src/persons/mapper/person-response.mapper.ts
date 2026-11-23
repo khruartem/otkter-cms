@@ -3,13 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
 
 import type { PersonDetails } from '../types.js';
-import type { PersonResponseDto } from '../dto/person-response.dto.js';
+import type { ResponsePersonDto } from '../dto/response-person.dto.js';
 
 @Injectable()
 export class PersonResponseMapper {
   constructor(private readonly imageResponseMapper: ImageResponseMapper) {}
 
-  toDto(person: PersonDetails): PersonResponseDto {
+  toDto(person: PersonDetails): ResponsePersonDto {
     const {
       id,
       slug,

@@ -11,7 +11,7 @@ import { EventsService } from './events.service.js';
 import { EventResponseMapper } from './mappers/event-response.mapper.js';
 
 import { CreateEventDto } from './dto/create-event.dto.js';
-import { EventResponseDto } from './dto/event-response.dto.js';
+import { ResponseEventDto } from './dto/response-event.dto.js';
 
 @Controller('projects/:projectId/events')
 export class ProjectEventsController {
@@ -24,7 +24,7 @@ export class ProjectEventsController {
   async createEvent(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Body() dto: CreateEventDto,
-  ): Promise<EventResponseDto> {
+  ): Promise<ResponseEventDto> {
     const event = await this.eventsService.create(projectId, dto);
 
     return this.eventResponseMapper.toDto(event);
@@ -33,7 +33,7 @@ export class ProjectEventsController {
   @Get()
   async getEvents(
     @Param('projectId', ParseUUIDPipe) projectId: string,
-  ): Promise<EventResponseDto[]> {
+  ): Promise<ResponseEventDto[]> {
     const events = await this.eventsService.findAll(projectId);
 
     return events.map((event) => this.eventResponseMapper.toDto(event));

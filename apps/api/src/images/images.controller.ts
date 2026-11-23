@@ -22,7 +22,7 @@ import { ImageResponseMapper } from './mappers/image-response.mapper.js';
 import { IMAGE_CONFIG } from './config/image.config.js';
 import type { File } from './types.js';
 
-import { ImageResponseDto } from './dto/image-response.dto.js';
+import { ResponseImageDto } from './dto/response-image.dto.js';
 
 @Controller('images')
 export class ImagesController {
@@ -60,7 +60,7 @@ export class ImagesController {
       }),
     )
     file: File,
-  ): Promise<ImageResponseDto> {
+  ): Promise<ResponseImageDto> {
     const image = await this.imagesService.upload(file);
 
     return this.imageResponseMapper.toDto(image);
@@ -69,7 +69,7 @@ export class ImagesController {
   @Get(':id')
   async getImage(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<ImageResponseDto> {
+  ): Promise<ResponseImageDto> {
     const image = await this.imagesService.find(id);
 
     return this.imageResponseMapper.toDto(image);
