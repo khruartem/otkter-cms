@@ -11,6 +11,7 @@ import { StorageModule } from './storage/storage.module.js';
 import { ImagesModule } from './images/images.module.js';
 import { CategoriesModule } from './categories/categories.module.js';
 import { PersonsModule } from './persons/persons.module.js';
+import { SocialMediasModule } from './social-medias/social-medias.module.js';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PersonsModule } from './persons/persons.module.js';
     ImagesModule,
     CategoriesModule,
     PersonsModule,
+    SocialMediasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

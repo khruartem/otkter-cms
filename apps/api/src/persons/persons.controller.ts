@@ -10,11 +10,16 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+
 import { PersonsService } from './persons.service.js';
 import { PersonResponseMapper } from './mapper/person-response.mapper.js';
-import { CreatePersonDto } from './dto/create-person.dto.js';
-import { ResponsePersonDto } from './dto/response-person.dto.js';
-import { UpdatePersonDto } from './dto/update-person.dto.js';
+
+import type { CreatePersonDto } from './dto/create-person.dto.js';
+import type { ResponsePersonDto } from './dto/response-person.dto.js';
+import type { UpdatePersonDto } from './dto/update-person.dto.js';
+import type { AddPersonCategoryDto } from './dto/add-person-category.dto.js';
+
+import type { PersonCategory } from '../generated/prisma/client.js';
 
 @Controller('persons')
 export class PersonsController {
@@ -60,5 +65,22 @@ export class PersonsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePerson(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.personsService.remove(id);
+  }
+
+  @Post(':id/categories')
+  async addPersonCategory(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AddPersonCategoryDto,
+  ): Promise<PersonCategory> {
+    return this.personsService.assignCategory(id, dto);
+  }
+
+  @Delete(':id/categories/:categoryId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deletePersonCategory(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('categoryId', ParseUUIDPipe) categoryId: string,
+  ): Promise<void> {
+    await this.personsService.unassignCategory(id, categoryId);
   }
 }
