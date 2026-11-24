@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ImagesModule } from '../images/images.module.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
 import { CategoriesModule } from '../categories/categories.module.js';
+import { SocialMediasModule } from '../social-medias/social-medias.module.js';
 
 import { PersonsController } from './persons.controller.js';
 
@@ -13,7 +14,7 @@ import { PersonResponseMapper } from './mapper/person-response.mapper.js';
 @Module({
   controllers: [PersonsController],
   providers: [PersonsService, PersonResponseMapper],
-  imports: [PrismaModule, ImagesModule, CategoriesModule],
+  imports: [PrismaModule, ImagesModule, CategoriesModule, SocialMediasModule],
   exports: [PersonResponseMapper],
 })
 export class PersonsModule {}
