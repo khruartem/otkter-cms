@@ -257,15 +257,17 @@ model Action {
 }
 
 model SocialMedia {
-  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  personId String  @map("person_id") @db.Uuid
-  iconId   String? @map("icon_id") @db.Uuid
-  url      String  @db.Text
-  text     String  @db.Text
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  personId  String  @map("person_id") @db.Uuid
+  iconId    String? @map("icon_id") @db.Uuid
+  sortOrder Int?    @map("sort_order")
+  url       String  @db.Text
+  text      String  @db.Text
 
   person Person @relation(fields: [personId], references: [id], onDelete: Cascade)
   icon   Image? @relation(fields: [iconId], references: [id], onDelete: Restrict)
 
+  @@unique([personId, sortOrder], map: "social_media_person_sort_order_key")
   @@index([personId], map: "idx_social_media_person_id")
   @@map("social_media")
 }
