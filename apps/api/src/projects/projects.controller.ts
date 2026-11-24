@@ -18,8 +18,12 @@ import { CreateProjectDto } from './dto/create-project.dto.js';
 import { UpdateProjectDto } from './dto/update-project.dto.js';
 import { ResponseProjectDto } from './dto/response-project.dto.js';
 import { AddProjectCategoryDto } from './dto/add-project-category.dto.js';
+import { AddProjectPersonDto } from './dto/add-project-person.dto.js';
 
-import type { ProjectCategory } from '../generated/prisma/client.js';
+import type {
+  ProjectCategory,
+  ProjectPerson,
+} from '../generated/prisma/client.js';
 
 @Controller('projects')
 export class ProjectsController {
@@ -84,5 +88,13 @@ export class ProjectsController {
     @Param('categoryId', ParseUUIDPipe) categoryId: string,
   ): Promise<void> {
     await this.projectsService.unassignCategory(id, categoryId);
+  }
+
+  @Post(':id/persons')
+  async addProjectPerson(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AddProjectPersonDto,
+  ): Promise<ProjectPerson> {
+    return this.projectsService.assignPerson(id, dto);
   }
 }

@@ -14,5 +14,6 @@ import { PersonResponseMapper } from './mapper/person-response.mapper.js';
   controllers: [PersonsController],
   providers: [PersonsService, PersonResponseMapper],
   imports: [PrismaModule, ImagesModule, CategoriesModule],
+  exports: [PersonResponseMapper],
 })
 export class PersonsModule {}

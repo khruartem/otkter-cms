@@ -3,6 +3,7 @@ import type { ResponseEventDto } from '../../events/dto/response-event.dto.js';
 import type { ResponseImageDto } from '../../images/dto/response-image.dto.js';
 
 import type { PublicationStatus } from '../../generated/prisma/client.js';
+import { ResponseProjectPersonDto } from './response-project-person.dto.js';
 
 export class ResponseProjectDto {
   id: string;
@@ -17,6 +18,7 @@ export class ResponseProjectDto {
   icon: ResponseImageDto | null;
   categories: ResponseCategoryDto[];
   events: ResponseEventDto[];
+  persons: ResponseProjectPersonDto[];
   isMain: boolean;
   isActive: boolean;
   categoryIsAttention: boolean;
