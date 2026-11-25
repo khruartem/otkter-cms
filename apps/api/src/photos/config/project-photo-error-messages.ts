@@ -1,6 +1,6 @@
-import { PrismaErrorMessages } from '../../prisma/types.js';
+import type { PrismaErrorMessages } from '../../prisma/types.js';
 
-import type { photoErrorMessages } from './photo-error-messages.js';
+import { photoErrorMessages } from './photo-error-messages.js';
 
 export const projectPhotoErrorMessages = {
   ...photoErrorMessages,
