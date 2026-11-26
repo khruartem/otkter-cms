@@ -5,6 +5,7 @@ import { PrismaModule } from '../prisma/prisma.module.js';
 import { CategoriesModule } from '../categories/categories.module.js';
 import { EventsModule } from '../events/events.module.js';
 import { PersonsModule } from '../persons/persons.module.js';
+import { PhotosModule } from '../photos/photos.module.js';
 
 import { ProjectsController } from './projects.controller.js';
 import { ProjectPersonController } from './project-person.controller.js';
@@ -21,6 +22,7 @@ import { ProjectResponseMapper } from './mappers/project-response.mapper.js';
     CategoriesModule,
     EventsModule,
     PersonsModule,
+    PhotosModule,
   ],
 })
 export class ProjectsModule {}

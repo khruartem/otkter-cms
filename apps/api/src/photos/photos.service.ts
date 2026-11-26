@@ -8,6 +8,7 @@ import { handlePrismaError } from '../prisma/utils/handle-prisma-error.js';
 
 import { projectPhotoErrorMessages } from './config/project-photo-error-messages.js';
 import { photoErrorMessages } from './config/photo-error-messages.js';
+import { personPhotoErrorMessages } from './config/person-photo-error-messages.js';
 import { photoDetailsInclude } from './config/photo-details-include.js';
 
 import type { PhotoDetails } from './types.js';
@@ -35,6 +36,28 @@ export class PhotosService {
       });
     } catch (error) {
       handlePrismaError(error, projectPhotoErrorMessages);
+    }
+  }
+
+  async createForPerson(
+    personId: string,
+    dto: CreatePhotoDto,
+  ): Promise<PhotoDetails> {
+    try {
+      return await this.prismaService.photo.create({
+        data: {
+          sortOrder: dto.sortOrder,
+          person: {
+            connect: { id: personId },
+          },
+          image: {
+            connect: { id: dto.imageId },
+          },
+        },
+        include: photoDetailsInclude,
+      });
+    } catch (error) {
+      handlePrismaError(error, personPhotoErrorMessages);
     }
   }
 

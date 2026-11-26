@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
 import { CategoryResponseMapper } from '../../categories/mappers/category-response.mapper.js';
 import { SocialMediaResponseMapper } from '../../social-medias/mapper/social-media-response.mapper.js';
+import { PhotoResponseMapper } from '../../photos/mapper/photo-response.mapper.js';
 
 import type { PersonDetails } from '../types.js';
 import type { ResponsePersonDto } from '../dto/response-person.dto.js';
@@ -13,6 +14,7 @@ export class PersonResponseMapper {
     private readonly imageResponseMapper: ImageResponseMapper,
     private readonly categoryResponseMapper: CategoryResponseMapper,
     private readonly socialMediaResponseMapper: SocialMediaResponseMapper,
+    private readonly photoResponseMapper: PhotoResponseMapper,
   ) {}
 
   toDto(person: PersonDetails): ResponsePersonDto {
@@ -29,6 +31,7 @@ export class PersonResponseMapper {
       icon,
       categories,
       socialMedias,
+      photos,
       createdAt,
       updatedAt,
       publicationStatus,
@@ -51,6 +54,7 @@ export class PersonResponseMapper {
       socialMedias: socialMedias.map((socialMedia) =>
         this.socialMediaResponseMapper.toDto(socialMedia),
       ),
+      photos: photos.map((photo) => this.photoResponseMapper.toDto(photo)),
       createdAt,
       updatedAt,
       publicationStatus,

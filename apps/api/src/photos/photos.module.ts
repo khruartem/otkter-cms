@@ -5,13 +5,19 @@ import { PrismaModule } from '../prisma/prisma.module.js';
 
 import { PhotosController } from './photos.controller.js';
 import { ProjectPhotosController } from './project-photos.controller.js';
+import { PersonPhotosController } from './person-photos.controller.js';
 
 import { PhotosService } from './photos.service.js';
 import { PhotoResponseMapper } from './mapper/photo-response.mapper.js';
 
 @Module({
   providers: [PhotosService, PhotoResponseMapper],
-  controllers: [PhotosController, ProjectPhotosController],
+  controllers: [
+    PhotosController,
+    ProjectPhotosController,
+    PersonPhotosController,
+  ],
   imports: [PrismaModule, ImagesModule],
+  exports: [PhotoResponseMapper],
 })
 export class PhotosModule {}
