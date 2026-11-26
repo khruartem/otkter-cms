@@ -4,6 +4,7 @@ import { CategoryResponseMapper } from '../../categories/mappers/category-respon
 import { ImageResponseMapper } from '../../images/mappers/image-response.mapper.js';
 import { EventResponseMapper } from '../../events/mappers/event-response.mapper.js';
 import { PersonResponseMapper } from '../../persons/mapper/person-response.mapper.js';
+import { PhotoResponseMapper } from '../../photos/mapper/photo-response.mapper.js';
 
 import { ResponseProjectDto } from '../dto/response-project.dto.js';
 
@@ -16,6 +17,7 @@ export class ProjectResponseMapper {
     private readonly categoryResponseMapper: CategoryResponseMapper,
     private readonly eventResponseMapper: EventResponseMapper,
     private readonly personResponseMapper: PersonResponseMapper,
+    private readonly photoResponseMapper: PhotoResponseMapper,
   ) {}
 
   toDto(project: ProjectDetails): ResponseProjectDto {
@@ -33,9 +35,10 @@ export class ProjectResponseMapper {
       isMain,
       isActive,
       categories,
+      categoryIsAttention,
       events,
       persons,
-      categoryIsAttention,
+      photos,
       createdAt,
       updatedAt,
       publicationStatus,
@@ -57,6 +60,7 @@ export class ProjectResponseMapper {
       categories: categories.map(({ category }) =>
         this.categoryResponseMapper.toDto(category),
       ),
+      categoryIsAttention,
       events: events.map((event) => this.eventResponseMapper.toDto(event)),
       persons: persons.map(({ id, role, extra, person }) => ({
         id,
@@ -64,7 +68,7 @@ export class ProjectResponseMapper {
         extra,
         person: this.personResponseMapper.toDto(person),
       })),
-      categoryIsAttention,
+      photos: photos.map((photo) => this.photoResponseMapper.toDto(photo)),
       createdAt,
       updatedAt,
       publicationStatus,

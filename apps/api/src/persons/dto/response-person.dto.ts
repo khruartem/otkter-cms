@@ -1,6 +1,7 @@
 import type { ResponseImageDto } from '../../images/dto/response-image.dto.js';
 import type { ResponseCategoryDto } from '../../categories/dto/response-category.dto.js';
 import type { ResponseSocialMediaDto } from '../../social-medias/dto/response-social-media.dto.js';
+import type { ResponsePhotoDto } from '../../photos/dto/response-photo.dto.js';
 
 import type { PublicationStatus } from '../../generated/prisma/client.js';
 
@@ -17,6 +18,7 @@ export class ResponsePersonDto {
   icon: ResponseImageDto | null;
   categories: ResponseCategoryDto[];
   socialMedias: ResponseSocialMediaDto[];
+  photos: ResponsePhotoDto[];
   createdAt: Date;
   updatedAt: Date;
   publicationStatus: PublicationStatus;
