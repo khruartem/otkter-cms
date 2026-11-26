@@ -13,6 +13,7 @@ import { CategoriesModule } from './categories/categories.module.js';
 import { PersonsModule } from './persons/persons.module.js';
 import { SocialMediasModule } from './social-medias/social-medias.module.js';
 import { PhotosModule } from './photos/photos.module.js';
+import { OrderingModule } from './ordering/ordering.module.js';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PhotosModule } from './photos/photos.module.js';
     PersonsModule,
     SocialMediasModule,
     PhotosModule,
+    OrderingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
