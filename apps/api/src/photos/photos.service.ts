@@ -7,6 +7,7 @@ import { CreatePhotoDto } from './dto/create-photo.dto.js';
 import { handlePrismaError } from '../prisma/utils/handle-prisma-error.js';
 
 import { projectPhotoErrorMessages } from './config/project-photo-error-messages.js';
+import { photoErrorMessages } from './config/photo-error-messages.js';
 import { photoDetailsInclude } from './config/photo-details-include.js';
 
 import type { PhotoDetails } from './types.js';
@@ -34,6 +35,16 @@ export class PhotosService {
       });
     } catch (error) {
       handlePrismaError(error, projectPhotoErrorMessages);
+    }
+  }
+
+  async remove(id: string): Promise<void> {
+    try {
+      await this.prismaService.photo.delete({
+        where: { id },
+      });
+    } catch (error) {
+      handlePrismaError(error, photoErrorMessages);
     }
   }
 }
