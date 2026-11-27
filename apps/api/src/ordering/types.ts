@@ -8,4 +8,5 @@ export interface OrderingAdapter {
     id: string,
     sortOrder: number,
   ): Promise<void>;
+  lockKey: string;
 }
